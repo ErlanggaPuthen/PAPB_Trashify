@@ -119,19 +119,16 @@ class _SignInPageState extends State<SignInPage> {
                       ),
                     ),
                     const SizedBox(height: 20.0),
-                    InkWell(
+                    // Tambahan tulisan login
+                    GestureDetector(
                       onTap: () {
-                        Navigator.of(context).push(MaterialPageRoute(
-                          builder: (context) => SignUpPage(),
-                        ));
+                        Navigator.pushNamed(context, "/register");
                       },
-                      child: Text(
-                        'REGISTER',
+                      child: const Text(
+                        'Already have an account? Login',
                         style: TextStyle(
-                          fontFamily: 'CarthagePro',
-                          color: Colors.white,
-                          fontSize: 18.0,
-                          fontWeight: FontWeight.bold,
+                          color:Colors.white,
+                          decoration: TextDecoration.underline,
                         ),
                       ),
                     ),

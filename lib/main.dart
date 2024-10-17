@@ -1,6 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:trashify_mobile/home_screen.dart';
+import 'package:trashify_mobile/register.dart';
 // import './splash_screen.dart';
 import './login.dart';
 
@@ -33,6 +34,8 @@ class MyApp extends StatelessWidget {
       home: SignInPage(),
       routes: {
         '/home': (context) => HomeScreen(), // Pastikan HomeScreen sudah di-import
+        '/login': (context) => SignInPage(),
+        '/register': (context) => SignUpPage(),
       },debugShowCheckedModeBanner: false,
     );
   }

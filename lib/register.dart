@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:trashify_mobile/firebase_auth_services.dart';
 // import 'home_screen.dart';
 
-void main(){
-runApp(MaterialApp(home: SignUpPage(),));
+void main() {
+  runApp(MaterialApp(home: SignUpPage(),));
 }
 
 class SignUpPage extends StatefulWidget {
@@ -40,12 +40,12 @@ class _SignUpPageState extends State<SignUpPage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 0, 166, 255),
+      backgroundColor: Color(0xffecf87f),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Card(
-            color: Colors.black,
+            color: Color(0xff3d550c),
             elevation: 8.0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
@@ -58,6 +58,14 @@ class _SignUpPageState extends State<SignUpPage> {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: <Widget>[
+                    const SizedBox(height: 20.0),
+                    ClipOval(
+                      child: Image.asset(
+                        'assets/trashify.png',
+                        width: 100,
+                        height: 100,
+                      ),
+                    ),
                     const SizedBox(height: 20.0),
                     TextFormField(
                       controller: _emailController,
@@ -105,7 +113,7 @@ class _SignUpPageState extends State<SignUpPage> {
                         _signUp();
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Color.fromARGB(255, 0, 166, 255),
+                        backgroundColor: Color(0xffd5ce58),
                         minimumSize: const Size(0, 48.0),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(8.0),
@@ -122,12 +130,26 @@ class _SignUpPageState extends State<SignUpPage> {
                               'REGISTER',
                               style: TextStyle(
                                 fontFamily: 'CarthagePro',
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
                               ),
                             ),
                           ],
+                        ),
+                      ),
+                    ),
+                    const SizedBox(height: 20.0),
+                    // Tambahan tulisan login
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.pushNamed(context, "/login");
+                      },
+                      child: const Text(
+                        'Already have an account? Login',
+                        style: TextStyle(
+                          color:Colors.white,
+                          decoration: TextDecoration.underline,
                         ),
                       ),
                     ),
@@ -141,7 +163,7 @@ class _SignUpPageState extends State<SignUpPage> {
     );
   }
 
-  void _signUp() async{
+  void _signUp() async {
     String email = _emailController.text;
     String password = _passwordController.text;
 
@@ -150,9 +172,8 @@ class _SignUpPageState extends State<SignUpPage> {
     if (user != null) {
       print("Akun Anda Telah Dibuat");
       Navigator.pushNamed(context, "/home");
-    } else{
+    } else {
       print("Error! Silahkan coba lagi");
     }
   }
-
 }
