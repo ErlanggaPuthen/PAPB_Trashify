@@ -222,7 +222,7 @@ class _HomeScreenState extends State<HomeScreen> {
             });
           },
           child: Card(
-            color: Color(0xFFffd700),
+            color: Color(0xff81b622),
             margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             elevation: 4.0,
             child: ListTile(
@@ -263,7 +263,7 @@ class _HomeScreenState extends State<HomeScreen> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: Color(0xFFffd700),
+          backgroundColor: Color(0xff81b622),
           title: Text('Hapus Riwayat Prediksi'),
           content:
               Text('Apakah Anda yakin ingin menghapus semua riwayat prediksi?'),
@@ -389,8 +389,8 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       backgroundColor: Colors.white,
       floatingActionButton: FloatingActionButton(
-        backgroundColor: Colors.red,
-        focusColor: Colors.red,
+        backgroundColor: Color(0xff81b622),
+        focusColor: Color(0xff81b622),
         onPressed: _scrollToTop,
         tooltip: 'Scroll to Top',
         child: Icon(Icons.keyboard_arrow_up),
@@ -483,7 +483,7 @@ class _HomeScreenState extends State<HomeScreen> {
               SizedBox(height: 20.0),
               if (_predictedJenis.isNotEmpty)
                 Card(
-                  color: Color(0xFFffd700),
+                  color: Color(0xff81b622),
                   child: Padding(
                     padding: const EdgeInsets.all(8.0),
                     child: SizedBox(
