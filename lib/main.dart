@@ -36,6 +36,7 @@ class MyApp extends StatelessWidget {
         '/home': (context) => HomeScreen(), // Pastikan HomeScreen sudah di-import
         '/login': (context) => SignInPage(),
         '/register': (context) => SignUpPage(),
+        
       },debugShowCheckedModeBanner: false,
     );
   }

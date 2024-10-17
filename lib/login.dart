@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:trashify_mobile/firebase_auth_services.dart';
-import 'register.dart';
+//import 'register.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
