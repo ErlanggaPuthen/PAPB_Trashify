@@ -125,7 +125,7 @@ class _SignInPageState extends State<SignInPage> {
                         Navigator.pushNamed(context, "/register");
                       },
                       child: const Text(
-                        'Already have an account? Login',
+                        'Dont have an account? Register',
                         style: TextStyle(
                           color:Colors.white,
                           decoration: TextDecoration.underline,
