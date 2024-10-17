@@ -191,42 +191,27 @@ class _HomeScreenState extends State<HomeScreen> {
         }
 
         var prediction = displayHistory[index];
-        String namaBatik = '';
+        String jenisSampah = '';
 
-        // Tambahkan penanganan khusus untuk menampilkan nama batik berdasarkan id_batik
-        switch (prediction['id_batik']) {
+        // Tambahkan penanganan khusus untuk menampilkan jenis sampah berdasarkan jenis_sampah
+        switch (prediction['jenis_sampah']) {
           case 1:
-            namaBatik = 'Batik Cendrawasih';
+            jenisSampah = 'Sampah Organik';
             break;
           case 2:
-            namaBatik = 'Batik Dayak';
+            jenisSampah = 'Sampah Anorganik';
             break;
           case 3:
-            namaBatik = 'Batik Ikat Celup';
+            jenisSampah = '';
             break;
           case 4:
-            namaBatik = 'Batik Insang';
+            jenisSampah = '';
             break;
           case 5:
-            namaBatik = 'Batik Kawung';
-            break;
-          case 6:
-            namaBatik = 'Batik Megamendung';
-            break;
-          case 7:
-            namaBatik = 'Batik Parang';
-            break;
-          case 8:
-            namaBatik = 'Batik Poleng';
-            break;
-          case 9:
-            namaBatik = 'Batik Sekar Jagad';
-            break;
-          case 10:
-            namaBatik = 'Batik Tambal';
+            jenisSampah = '';
             break;
           default:
-            namaBatik = 'Unknown Batik';
+            jenisSampah = 'Unknown Jenis Sampah';
             break;
         }
 
@@ -241,7 +226,7 @@ class _HomeScreenState extends State<HomeScreen> {
             margin: EdgeInsets.symmetric(vertical: 8.0, horizontal: 16.0),
             elevation: 4.0,
             child: ListTile(
-              title: Text('$namaBatik', style: TextStyle(fontWeight: FontWeight.bold)),
+              title: Text('$jenisSampah', style: TextStyle(fontWeight: FontWeight.bold)),
               subtitle: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
