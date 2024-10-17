@@ -349,7 +349,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 width: MediaQuery.of(context).size.width *
                     0.1, // Ubah persentase sesuai kebutuhan
                 child: Image.asset(
-                  'assets/logoo.png', // Ganti dengan path dan nama gambar yang sesuai
+                  'assets/trashify.png', // Ganti dengan path dan nama gambar yang sesuai
                   width: 60, // Sesuaikan ukuran gambar
                   height: 60, // Sesuaikan ukuran gambar
                   fit: BoxFit.cover,
@@ -358,7 +358,7 @@ class _HomeScreenState extends State<HomeScreen> {
               Expanded(
                 child: Center(
                   child: Text(
-                    'B A T I C S',
+                    'T R A S H I F Y',
                     style: TextStyle(
                       fontFamily:
                           'CS Gordon Sheriff', // Pastikan font telah didaftarkan di pubspec.yaml
@@ -371,7 +371,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ],
           ),
-          backgroundColor: Color.fromARGB(255, 0, 166, 255),
+          backgroundColor: Color(0xff81b622),
           actions: [
             IconButton(
               icon: Icon(Icons.logout), // Ganti dengan ikon logout atau ikon yang sesuai

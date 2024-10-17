@@ -55,8 +55,8 @@ class _SignInPageState extends State<SignInPage> {
                     ClipOval(
                       child: Image.asset(
                         'assets/trashify.png',
-                        width: 200,
-                        height: 200,
+                        width: 100,
+                        height: 100,
                       ),
                     ),
                     const SizedBox(height: 20.0),
