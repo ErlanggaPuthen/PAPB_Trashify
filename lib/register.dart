@@ -51,8 +51,8 @@ class _SignUpPageState extends State<SignUpPage> {
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: Container(
-              width: screenWidth * 0.7,
-              height: screenHeight * 0.55,
+              width: screenWidth * 0.9,
+              height: screenHeight * 0.69,
               padding: const EdgeInsets.all(20.0),
               child: SingleChildScrollView(
                 child: Column(
@@ -130,7 +130,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               'REGISTER',
                               style: TextStyle(
                                 fontFamily: 'CarthagePro',
-                                color: Colors.white,
+                                color: Color(0xff2E2E2E),
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
                               ),

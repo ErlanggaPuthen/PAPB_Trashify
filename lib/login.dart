@@ -44,7 +44,7 @@ class _SignInPageState extends State<SignInPage> {
               borderRadius: BorderRadius.circular(8.0),
             ),
             child: Container(
-              width: screenWidth * 0.7,
+              width: screenWidth * 0.9,
               height: screenHeight * 0.65,
               padding: const EdgeInsets.all(20.0),
               child: SingleChildScrollView(
@@ -109,7 +109,7 @@ class _SignInPageState extends State<SignInPage> {
                               'LOGIN',
                               style: TextStyle(
                                 fontFamily: 'CarthagePro',
-                                color: Colors.white,
+                                color: Color(0xff2E2E2E),
                                 fontSize: 18.0,
                                 fontWeight: FontWeight.bold,
                               ),
