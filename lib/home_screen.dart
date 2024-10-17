@@ -17,7 +17,7 @@ class _HomeScreenState extends State<HomeScreen> {
   File? _image;
   bool _showImage = false;
   bool _imageUploaded = false;
-  String _predictedMotif = '';
+  String _predictedJenis = '';
   String _predictedDescription = '';
   List<dynamic> _predictionHistory = [];
 
@@ -75,7 +75,7 @@ class _HomeScreenState extends State<HomeScreen> {
       setState(() {
         _image = File(pickedImage.path);
         _imageUploaded = true;
-        _predictedMotif = '';
+        _predictedJenis = '';
       });
     }
   }
@@ -105,25 +105,25 @@ class _HomeScreenState extends State<HomeScreen> {
           String description = data['description'];
 
           setState(() {
-            _predictedMotif =
-                'Motif: $className\nAkurasi: ${confidence.toStringAsFixed(2)}';
+            _predictedJenis =
+                'Jenis: $className\nAkurasi: ${confidence.toStringAsFixed(2)}';
             _predictedDescription = '$description';
           });
 
           await _loadPredictionHistory(); // Memuat kembali log history setelah prediksi
         } else {
           setState(() {
-            _predictedMotif = 'Terjadi kesalahan saat menghubungi server.';
+            _predictedJenis = 'Terjadi kesalahan saat menghubungi server.';
           });
         }
       } else {
         setState(() {
-          _predictedMotif = 'Token akses tidak tersedia.';
+          _predictedJenis = 'Token akses tidak tersedia.';
         });
       }
     } catch (e) {
       setState(() {
-        _predictedMotif = 'Terjadi kesalahan: $e';
+        _predictedJenis = 'Terjadi kesalahan: $e';
       });
     }
   }
@@ -132,7 +132,7 @@ class _HomeScreenState extends State<HomeScreen> {
     setState(() {
       _image = null;
       _imageUploaded = false;
-      _predictedMotif = '';
+      _predictedJenis = '';
     });
   }
 
@@ -451,7 +451,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           }
                         : _showImageSourceDialog,
                     style: ElevatedButton.styleFrom(
-                      backgroundColor: Color.fromARGB(255, 0, 166, 255),
+                      backgroundColor: Color(0xff59981a),
                     ),
                     child: Text(
                       _imageUploaded ? 'Lihat Gambar' : 'Unggah Gambar',
@@ -467,7 +467,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ElevatedButton(
                       onPressed: _clearImage,
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.red,
+                        backgroundColor: Color(0xff59981a),
                       ),
                       child: Text(
                         'Ganti Gambar',
@@ -481,7 +481,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
               SizedBox(height: 20.0),
-              if (_predictedMotif.isNotEmpty)
+              if (_predictedJenis.isNotEmpty)
                 Card(
                   color: Color(0xFFffd700),
                   child: Padding(
@@ -501,7 +501,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           ),
                           SizedBox(height: 8.0),
                           Text(
-                            _predictedMotif,
+                            _predictedJenis,
                             style: TextStyle(
                               fontSize: 16.0,
                               fontWeight: FontWeight.bold,
