@@ -33,7 +33,7 @@ class MyApp extends StatelessWidget {
       ),
       home: MainScreen(),
       routes: {
-        //'/home': (context) => HomeScreen(),
+        '/home': (context) => HomeScreen(),
         '/login': (context) => SignInPage(),
         '/register': (context) => SignUpPage(),
       },
@@ -52,7 +52,7 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
   static const List<Widget> _widgetOptions = <Widget>[
-    //HomeScreen(),
+    HomeScreen(),
     HasilRiwayatPrediksi(),
     Profile(),
   ];
