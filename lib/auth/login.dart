@@ -1,7 +1,6 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:trashify_mobile/services/firebase_auth_services.dart';
-//import 'register.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -11,14 +10,13 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-
   final FirebaseAuthService _auth = FirebaseAuthService();
-
-  String email = '';
-  String password = '';
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
+  String? _errorMessage;
 
   @override
   void dispose() {
@@ -33,106 +31,61 @@ class _SignInPageState extends State<SignInPage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: Color(0xffecf87f),
+      backgroundColor: const Color(0xffecf87f),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Card(
-            color: Color(0xff3d550c),
+            color: const Color(0xff3d550c),
             elevation: 8.0,
             shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(8.0),
+              borderRadius: BorderRadius.circular(12.0),
             ),
             child: Container(
               width: screenWidth * 0.9,
               height: screenHeight * 0.65,
               padding: const EdgeInsets.all(20.0),
               child: SingleChildScrollView(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    const SizedBox(height: 20.0),
-                    ClipOval(
-                      child: Image.asset(
-                        'assets/trashify.png',
-                        width: 100,
-                        height: 100,
-                      ),
-                    ),
-                    const SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _emailController,
-                      decoration: InputDecoration(
-                        hintText: 'Username',
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        prefixIcon: Icon(Icons.person),
-                      ),
-                    ),
-                    const SizedBox(height: 20.0),
-                    TextFormField(
-                      controller: _passwordController,
-                      obscureText: true,
-                      decoration: InputDecoration(
-                        hintText: 'Password',
-                        fillColor: Colors.white,
-                        filled: true,
-                        border: OutlineInputBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        prefixIcon: Icon(Icons.lock),
-                      ),
-                    ),
-                    const SizedBox(height: 20.0),
-                    ElevatedButton(
-                      onPressed: () {
-                        _signIn();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Color(0xff81b622),
-                        minimumSize: Size(0, 48.0),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
+                child: Form(
+                  key: _formKey,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: <Widget>[
+                      const SizedBox(height: 20.0),
+                      ClipOval(
+                        child: Image.asset(
+                          'assets/trashify.png',
+                          width: 100,
+                          height: 100,
                         ),
                       ),
-                      child: Padding(
-                        padding: const EdgeInsets.all(16.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Icon(Icons.login),
-                            const SizedBox(width: 8.0),
-                            Text(
-                              'LOGIN',
-                              style: TextStyle(
-                                fontFamily: 'CarthagePro',
-                                color: Color(0xff2E2E2E),
-                                fontSize: 18.0,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                          ],
+                      const SizedBox(height: 20.0),
+                      _buildEmailField(),
+                      const SizedBox(height: 20.0),
+                      _buildPasswordField(),
+                      const SizedBox(height: 20.0),
+                      _buildLoginButton(),
+                      const SizedBox(height: 10.0),
+                      if (_errorMessage != null)
+                        Text(
+                          _errorMessage!,
+                          style: const TextStyle(color: Colors.red),
+                        ),
+                      const SizedBox(height: 10.0),
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushNamed(context, "/register");
+                        },
+                        child: const Text(
+                          'Don\'t have an account? Register',
+                          style: TextStyle(
+                            color: Colors.white,
+                            decoration: TextDecoration.underline,
+                          ),
                         ),
                       ),
-                    ),
-                    const SizedBox(height: 20.0),
-                    // Tambahan tulisan login
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushNamed(context, "/register");
-                      },
-                      child: const Text(
-                        'Dont have an account? Register',
-                        style: TextStyle(
-                          color:Colors.white,
-                          decoration: TextDecoration.underline,
-                        ),
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -142,18 +95,108 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-  void _signIn() async{
+  Widget _buildEmailField() {
+    return TextFormField(
+      controller: _emailController,
+      decoration: InputDecoration(
+        hintText: 'Email',
+        fillColor: Colors.white,
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        prefixIcon: const Icon(Icons.email),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your email';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _buildPasswordField() {
+    return TextFormField(
+      controller: _passwordController,
+      obscureText: true,
+      decoration: InputDecoration(
+        hintText: 'Password',
+        fillColor: Colors.white,
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+        prefixIcon: const Icon(Icons.lock),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Please enter your password';
+        }
+        return null;
+      },
+    );
+  }
+
+  Widget _buildLoginButton() {
+    return ElevatedButton(
+      onPressed: _isLoading ? null : _signIn,
+      style: ElevatedButton.styleFrom(
+        backgroundColor: const Color(0xff81b622),
+        minimumSize: const Size(0, 48.0),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(8.0),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: _isLoading
+            ? const CircularProgressIndicator(
+                valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+              )
+            : Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  const Icon(Icons.login),
+                  const SizedBox(width: 8.0),
+                  const Text(
+                    'LOGIN',
+                    style: TextStyle(
+                      fontFamily: 'CarthagePro',
+                      color: Color(0xff2E2E2E),
+                      fontSize: 18.0,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
+              ),
+      ),
+    );
+  }
+
+  void _signIn() async {
+    if (!_formKey.currentState!.validate()) {
+      return; // Tidak valid, keluar dari fungsi
+    }
+
+    setState(() {
+      _isLoading = true; // Tampilkan loading
+      _errorMessage = null; // Reset error message
+    });
+
     String email = _emailController.text;
     String password = _passwordController.text;
 
-    User? user = await _auth.signInWithEmailAndPassword(email, password);
-
-    if (user != null) {
-      print("Akun Anda Telah Dibuat!");
-      Navigator.pushNamed(context, "/home");
-    } else{
-      print("Error! Silahkan coba lagi");
+    try {
+      User? user = await _auth.signInWithEmailAndPassword(email, password);
+      if (user != null) {
+        Navigator.pushReplacementNamed(context, "/main");
+      }
+    } catch (e) {
+      setState(() {
+        _errorMessage = 'Login failed: ${e.toString()}';
+        _isLoading = false; // Hentikan loading
+      });
     }
   }
-
 }
