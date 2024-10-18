@@ -1,5 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:trashify_mobile/screens/home_screen.dart';
 import 'package:trashify_mobile/screens/hasil_riwayat_prediksi.dart';
 import 'package:trashify_mobile/screens/profile.dart';
@@ -30,6 +31,15 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
+        textTheme: TextTheme(
+          titleLarge: GoogleFonts.poppins(
+            textStyle: const TextStyle(
+              fontSize: 24.0,
+              fontWeight: FontWeight.bold,
+              color: Color(0xff03ac0e),
+            ),
+          ),
+        ),
       ),
       home: MainScreen(),
       routes: {
@@ -66,8 +76,23 @@ class _MainScreenState extends State<MainScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Trashify'),
+      appBar: PreferredSize(
+        preferredSize: Size.fromHeight(60.0), // Batasan kustom tinggi top bar
+        child: AppBar(
+          title: Text(
+            'Trashify',
+            style: GoogleFonts.poppins(       //pake font poppins
+              textStyle: const TextStyle(
+              fontSize: 24.0,                 // ini untuk ukuran teks dipojok atas kiri
+              fontWeight: FontWeight.bold,    // teksnya bold
+              color: Color(0xff03ac0e),     // warna text
+              )
+            ),
+          ),
+          backgroundColor: Colors.white, // Warna top bar
+          centerTitle: false, // Menempatkan title di tengah
+          elevation: 3.0, // Memberikan shadow pada top bar
+        ),
       ),
       body: Center(
         child: _widgetOptions.elementAt(_selectedIndex),
@@ -88,7 +113,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Colors.deepPurple,
+        selectedItemColor: Color(0xff03ac0e),
         onTap: _onItemTapped,
       ),
     );
