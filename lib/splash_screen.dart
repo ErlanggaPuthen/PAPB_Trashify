@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../auth/login.dart';
+import 'auth/login.dart';
 // import './home_screen.dart';
 import 'dart:async'; // Tambahkan baris ini
 

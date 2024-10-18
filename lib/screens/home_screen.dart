@@ -30,6 +30,7 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Klasifikasi Sampah'),
         backgroundColor: Colors.green,
+        automaticallyImplyLeading: false,
       ),
       body: Center( // Membuat semua konten berada di tengah
         child: SingleChildScrollView(
