@@ -86,7 +86,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               Icon(Icons.person_add),
                               SizedBox(width: 8.0),
                               Text(
-                                'REGISTER',
+                                'DAFTAR',
                                 style: TextStyle(
                                   fontFamily: 'CarthagePro',
                                   color: Color(0xff2E2E2E),
@@ -104,7 +104,7 @@ class _SignUpPageState extends State<SignUpPage> {
                           Navigator.pushNamed(context, "/login");
                         },
                         child: const Text(
-                          'Already have an account? Login',
+                          'Sudah punya akun Trashify? Login',
                           style: TextStyle(
                             color: Colors.white,
                             decoration: TextDecoration.underline,

@@ -1,4 +1,5 @@
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:trashify_mobile/services/firebase_auth_services.dart';
 
@@ -31,12 +32,12 @@ class _SignInPageState extends State<SignInPage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xffecf87f),
+      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Card(
-            color: const Color(0xff3d550c),
+            color: const Color(0xFFFFFFFF),
             elevation: 8.0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(12.0),
@@ -72,16 +73,27 @@ class _SignInPageState extends State<SignInPage> {
                           style: const TextStyle(color: Colors.red),
                         ),
                       const SizedBox(height: 10.0),
-                      GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, "/register");
-                        },
-                        child: const Text(
-                          'Don\'t have an account? Register',
-                          style: TextStyle(
-                            color: Colors.white,
-                            decoration: TextDecoration.underline,
-                          ),
+                      RichText(
+                        text: TextSpan(
+                          children: [
+                            const TextSpan(
+                              text: 'Belum punya akun Trashify? ',
+                              style: TextStyle(
+                                color: Colors.black,
+                              ),
+                            ),
+                            TextSpan(
+                              text: 'Daftar',
+                              style: const TextStyle(
+                                color: Color(0xff098A4E), // Mengubah warna menjadi hijau
+                                decoration: TextDecoration.underline,
+                              ),
+                              recognizer: TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.pushNamed(context, "/register");
+                                },
+                            ),
+                          ],
                         ),
                       ),
                     ],
@@ -95,6 +107,8 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
+
+
   Widget _buildEmailField() {
     return TextFormField(
       controller: _emailController,
@@ -104,6 +118,15 @@ class _SignInPageState extends State<SignInPage> {
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat tidak fokus
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat fokus
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat di-enable
         ),
         prefixIcon: const Icon(Icons.email),
       ),
@@ -116,6 +139,7 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
+
   Widget _buildPasswordField() {
     return TextFormField(
       controller: _passwordController,
@@ -126,6 +150,15 @@ class _SignInPageState extends State<SignInPage> {
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat tidak fokus
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat fokus
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat di-enable
         ),
         prefixIcon: const Icon(Icons.lock),
       ),
@@ -142,7 +175,7 @@ class _SignInPageState extends State<SignInPage> {
     return ElevatedButton(
       onPressed: _isLoading ? null : _signIn,
       style: ElevatedButton.styleFrom(
-        backgroundColor: const Color(0xff81b622),
+        backgroundColor: const Color(0xff098A4E),
         minimumSize: const Size(0, 48.0),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -157,13 +190,12 @@ class _SignInPageState extends State<SignInPage> {
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: <Widget>[
-                  const Icon(Icons.login),
                   const SizedBox(width: 8.0),
                   const Text(
-                    'LOGIN',
+                    'MASUK',
                     style: TextStyle(
                       fontFamily: 'CarthagePro',
-                      color: Color(0xff2E2E2E),
+                      color: Colors.white,
                       fontSize: 18.0,
                       fontWeight: FontWeight.bold,
                     ),
