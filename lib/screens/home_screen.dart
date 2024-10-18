@@ -4,7 +4,7 @@ import 'dart:io';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
-import 'login.dart';
+import '../login.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
