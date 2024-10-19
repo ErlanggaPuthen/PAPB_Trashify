@@ -32,7 +32,7 @@ class _SignInPageState extends State<SignInPage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: const Color.fromARGB(255, 255, 255, 255),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -192,7 +192,7 @@ class _SignInPageState extends State<SignInPage> {
                 children: <Widget>[
                   const SizedBox(width: 8.0),
                   const Text(
-                    'MASUK',
+                    'Masuk',
                     style: TextStyle(
                       fontFamily: 'CarthagePro',
                       color: Colors.white,

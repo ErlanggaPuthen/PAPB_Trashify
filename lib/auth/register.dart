@@ -33,12 +33,12 @@ class _SignUpPageState extends State<SignUpPage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xffecf87f),
+      backgroundColor: const Color(0xFFFFFFFF),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Card(
-            color: const Color(0xff3d550c),
+            color: const Color(0xFFFFFFFF),
             elevation: 8.0,
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8.0),
@@ -72,7 +72,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       ElevatedButton(
                         onPressed: _signUp,
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: const Color(0xff81b622),
+                          backgroundColor: const Color(0xff098A4E),
                           minimumSize: const Size(0, 48.0),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(8.0),
@@ -83,13 +83,12 @@ class _SignUpPageState extends State<SignUpPage> {
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.center,
                             children: <Widget>[
-                              Icon(Icons.person_add),
                               SizedBox(width: 8.0),
                               Text(
-                                'DAFTAR',
+                                'Daftar',
                                 style: TextStyle(
                                   fontFamily: 'CarthagePro',
-                                  color: Color(0xff2E2E2E),
+                                  color: Colors.white,
                                   fontSize: 18.0,
                                   fontWeight: FontWeight.bold,
                                 ),
@@ -103,11 +102,19 @@ class _SignUpPageState extends State<SignUpPage> {
                         onTap: () {
                           Navigator.pushNamed(context, "/login");
                         },
-                        child: const Text(
-                          'Sudah punya akun Trashify? Login',
-                          style: TextStyle(
-                            color: Colors.white,
-                            decoration: TextDecoration.underline,
+                        child: RichText(
+                          text: const TextSpan(
+                            text: 'Sudah punya akun Trashify? ',
+                            style: TextStyle(color: Colors.black),
+                            children: <TextSpan>[
+                              TextSpan(
+                                text: 'Login',
+                                style: TextStyle(
+                                  color: Color(0xff098A4E), // Warna hijau
+                                  decoration: TextDecoration.underline,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                       ),
@@ -131,6 +138,15 @@ class _SignUpPageState extends State<SignUpPage> {
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat gak fokus
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat fokus
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat di enable
         ),
         prefixIcon: const Icon(Icons.email),
       ),
@@ -153,6 +169,15 @@ class _SignUpPageState extends State<SignUpPage> {
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border hijau
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat fokus
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         prefixIcon: const Icon(Icons.lock),
       ),
@@ -175,6 +200,15 @@ class _SignUpPageState extends State<SignUpPage> {
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border hijau
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat fokus
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         prefixIcon: const Icon(Icons.lock),
       ),
