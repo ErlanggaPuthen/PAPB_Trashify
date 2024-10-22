@@ -118,15 +118,15 @@ class _SignInPageState extends State<SignInPage> {
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat tidak fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat tidak fokus
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat fokus
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat di-enable
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat di-enable
         ),
         prefixIcon: const Icon(Icons.email),
       ),
@@ -150,15 +150,15 @@ class _SignInPageState extends State<SignInPage> {
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat tidak fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat tidak fokus
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat fokus
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat di-enable
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat di-enable
         ),
         prefixIcon: const Icon(Icons.lock),
       ),

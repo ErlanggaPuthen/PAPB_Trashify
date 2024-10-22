@@ -142,7 +142,7 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat fokus
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -173,7 +173,7 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat fokus
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
@@ -204,7 +204,7 @@ class _SignUpPageState extends State<SignUpPage> {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff00aa5b), width: 2.0), // Border saat fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat fokus
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
