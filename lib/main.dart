@@ -1,6 +1,6 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
-import 'package:trashify_mobile/screens/main_screen.dart'; // Import MainScreen
+import 'package:trashify_mobile/screens/main_screen.dart';
 import 'auth/login.dart';
 import 'auth/register.dart';
 

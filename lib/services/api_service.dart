@@ -3,7 +3,7 @@ import 'dart:convert';
 import 'dart:io';
 
 class ApiService {
-  final String apiUrl = 'http://10.160.96.1:5000'; // Ganti dengan IP lokal server
+  final String apiUrl = 'http://192.168.1.17:5000'; // Ganti dengan IP lokal server
 
   Future<Map<String, dynamic>> classifyImage(File image) async {
     try {
