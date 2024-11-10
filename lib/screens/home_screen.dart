@@ -5,7 +5,7 @@ import 'package:trashify_mobile/services/api_service.dart';
 import 'hasil_riwayat_prediksi.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key}) : super(key: key);
+  const HomeScreen({super.key});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -43,6 +43,14 @@ class _HomeScreenState extends State<HomeScreen> {
           'status': 'Sukses',
         });
       });
+
+      // Navigasi otomatis ke halaman Riwayat Prediksi setelah klasifikasi berhasil
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => HasilRiwayatPrediksi(riwayatPrediksi: _riwayatPrediksi),
+        ),
+      );
     } catch (e) {
       setState(() {
         _result = 'Terjadi kesalahan saat mengirim gambar: $e';
@@ -75,8 +83,9 @@ class _HomeScreenState extends State<HomeScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // Menampilkan gambar kosongan jika belum ada gambar yang dipilih
               _selectedImage == null
-                  ? const Text('Belum ada gambar yang dipilih', style: TextStyle(fontSize: 18.0))
+                  ? Image.asset('assets/placeholder.png', height: 250, width: 250) // Gambar placeholder
                   : Image.file(_selectedImage!, height: 250, width: 250),
               const SizedBox(height: 20),
               ElevatedButton.icon(
