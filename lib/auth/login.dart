@@ -32,7 +32,7 @@ class _SignInPageState extends State<SignInPage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xff098A4E),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),
@@ -56,8 +56,8 @@ class _SignInPageState extends State<SignInPage> {
                       ClipOval(
                         child: Image.asset(
                           'assets/trashify.png',
-                          width: 100,
-                          height: 100,
+                          width: 110,
+                          height: 110,
                         ),
                       ),
                       const SizedBox(height: 20.0),

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
-import 'auth/login.dart';
-// import './home_screen.dart';
-import 'dart:async'; // Tambahkan baris ini
+import 'dart:async';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -14,9 +12,8 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
     super.initState();
-    Timer(Duration(seconds: 1), () {
-      Navigator.pushReplacement(
-          context, MaterialPageRoute(builder: (context) => SignInPage()));
+    Timer(const Duration(seconds: 3), () {
+      Navigator.pushReplacementNamed(context, '/login'); // Navigate to login
     });
   }
 
@@ -24,15 +21,15 @@ class _SplashScreenState extends State<SplashScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
-        color: Color(0xFF81b622),
+        color: const Color(0xff098A4E),
         width: MediaQuery.of(context).size.width,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              './assets/Trashify2.png',
-              width: 300,
-              height: 300,
+              './assets/trashify2.png',
+              width: 500,
+              height: 500,
             )
           ],
         ),

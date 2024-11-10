@@ -1,29 +1,25 @@
-import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
+import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String apiUrl = 'http://192.168.1.17:5000'; // Ganti dengan IP lokal server
+  final String _baseUrl = 'http://192.168.1.183:5000/predict';
 
   Future<Map<String, dynamic>> classifyImage(File image) async {
     try {
-      var request = http.MultipartRequest(
-        'POST',
-        Uri.parse(apiUrl),
-      );
-      request.files.add(await http.MultipartFile.fromPath('file', image.path));
+      final request = http.MultipartRequest('POST', Uri.parse(_baseUrl))
+        ..files.add(await http.MultipartFile.fromPath('file', image.path));
 
-      var response = await request.send();
+      final streamedResponse = await request.send();
+      final response = await http.Response.fromStream(streamedResponse);
+
       if (response.statusCode == 200) {
-        var responseData = await response.stream.toBytes();
-        var result = json.decode(String.fromCharCodes(responseData));
-        return result;
+        return jsonDecode(response.body);
       } else {
-        throw Exception("Failed to classify image. Status code: ${response.statusCode}");
+        throw Exception('Gagal mengirim gambar: Status code ${response.statusCode}');
       }
     } catch (e) {
-      print("Error: $e");
-      throw Exception("Error connecting to the server. Check your connection and API URL.");
+      throw Exception('Gagal mengirim gambar: $e');
     }
   }
 }

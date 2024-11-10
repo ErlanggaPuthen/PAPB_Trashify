@@ -1,49 +1,47 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'dart:typed_data';
 import 'dart:io';
-import 'package:trashify_mobile/services/api_service.dart'; // Pastikan untuk mengimpor ApiService
+import 'package:trashify_mobile/services/api_service.dart';
+import 'hasil_riwayat_prediksi.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  const HomeScreen({Key? key}) : super(key: key);
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Uint8List? _image; // Variabel untuk menyimpan gambar dalam bentuk byte
-  String? _result; // Variabel untuk menyimpan hasil klasifikasi
-  final ApiService _apiService = ApiService(); // Instansiasi ApiService
-  XFile? _pickedFile; // Simpan file yang dipilih
+  File? _selectedImage;
+  String? _result;
+  final ApiService _apiService = ApiService();
+  List<Map<String, dynamic>> _riwayatPrediksi = [];
 
-  // Fungsi untuk memilih gambar dari galeri atau kamera
   Future<void> _pickImage(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
-    _pickedFile = await picker.pickImage(source: source);
+    final pickedFile = await picker.pickImage(source: source);
 
-    if (_pickedFile != null) {
-      final Uint8List imageBytes = await _pickedFile!.readAsBytes();
+    if (pickedFile != null) {
       setState(() {
-        _image = imageBytes; // Menyimpan gambar dalam bentuk byte
-        _result = null; // Reset hasil setiap kali gambar baru dipilih
+        _selectedImage = File(pickedFile.path);
+        _result = null;
       });
     }
   }
 
-  // Fungsi untuk mengirim gambar ke server Flask API
   Future<void> _classifyImage() async {
-    if (_pickedFile == null) return;
-
-    final imageFile = File(_pickedFile!.path); // Buat File dari XFile
+    if (_selectedImage == null) return;
 
     try {
-      // Panggil metode classifyImage dari ApiService
-      final result = await _apiService.classifyImage(imageFile);
+      final result = await _apiService.classifyImage(_selectedImage!);
 
-      // Dapatkan hasil klasifikasi dari respons server
       setState(() {
         _result = 'Kelas: ${result['class']} | Kepercayaan: ${result['confidence']}%';
+        _riwayatPrediksi.add({
+          'judul': result['class'],
+          'tanggal': DateTime.now().toString(),
+          'status': 'Sukses',
+        });
       });
     } catch (e) {
       setState(() {
@@ -58,49 +56,47 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Klasifikasi Sampah'),
         backgroundColor: Colors.green,
-        automaticallyImplyLeading: false,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.history),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => HasilRiwayatPrediksi(riwayatPrediksi: _riwayatPrediksi),
+                ),
+              );
+            },
+          ),
+        ],
       ),
       body: Center(
         child: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              _image == null
-                  ? const Text(
-                      'Belum ada gambar yang dipilih',
-                      style: TextStyle(fontSize: 18.0),
-                    )
-                  : Image.memory(
-                      _image!,
-                      height: 250,
-                      width: 250,
-                    ),
+              _selectedImage == null
+                  ? const Text('Belum ada gambar yang dipilih', style: TextStyle(fontSize: 18.0))
+                  : Image.file(_selectedImage!, height: 250, width: 250),
               const SizedBox(height: 20),
               ElevatedButton.icon(
                 onPressed: () => _pickImage(ImageSource.gallery),
                 icon: const Icon(Icons.photo),
                 label: const Text('Pilih Gambar dari Galeri'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                ),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               ),
               const SizedBox(height: 10),
               ElevatedButton.icon(
                 onPressed: () => _pickImage(ImageSource.camera),
                 icon: const Icon(Icons.camera_alt),
                 label: const Text('Ambil Gambar dari Kamera'),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.green,
-                ),
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
               ),
               const SizedBox(height: 20),
-              if (_image != null)
+              if (_selectedImage != null)
                 ElevatedButton(
                   onPressed: _classifyImage,
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                  ),
+                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
                   child: const Text('Klasifikasi Gambar'),
                 ),
               const SizedBox(height: 20),

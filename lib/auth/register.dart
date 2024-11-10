@@ -33,7 +33,7 @@ class _SignUpPageState extends State<SignUpPage> {
     final screenHeight = MediaQuery.of(context).size.height;
 
     return Scaffold(
-      backgroundColor: const Color(0xFFFFFFFF),
+      backgroundColor: const Color(0xff098A4E),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(20.0),

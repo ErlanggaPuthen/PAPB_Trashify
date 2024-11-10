@@ -14,9 +14,11 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
+
+  // Daftar widget yang ditampilkan berdasarkan indeks yang dipilih
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
-    HasilRiwayatPrediksi(),
+    HasilRiwayatPrediksi(riwayatPrediksi: []),
     Profile(),
   ];
 
@@ -29,14 +31,14 @@ class _MainScreenState extends State<MainScreen> {
   Future<void> _logout() async {
     final FirebaseAuthService _auth = FirebaseAuthService();
     await _auth.signOut();
-    Navigator.pushReplacementNamed(context, "/login"); // Ganti "/login" dengan nama rute login Anda
+    Navigator.pushReplacementNamed(context, "/login"); // Ganti "/login" sesuai dengan rute login Anda
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(60.0),
+        preferredSize: const Size.fromHeight(60.0),
         child: AppBar(
           automaticallyImplyLeading: false,
           title: Text(
@@ -50,12 +52,11 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
           backgroundColor: Colors.white,
-          centerTitle: false,
           elevation: 3.0,
           actions: [
             IconButton(
               icon: const Icon(Icons.logout),
-              onPressed: _logout, // Menangani logout saat tombol ditekan
+              onPressed: _logout, // Fungsi logout ketika tombol ditekan
             ),
           ],
         ),
@@ -79,7 +80,7 @@ class _MainScreenState extends State<MainScreen> {
           ),
         ],
         currentIndex: _selectedIndex,
-        selectedItemColor: Color(0xff03ac0e),
+        selectedItemColor: const Color(0xff03ac0e),
         onTap: _onItemTapped,
       ),
     );

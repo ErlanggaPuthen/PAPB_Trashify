@@ -1,8 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:trashify_mobile/screens/main_screen.dart';
+import 'package:trashify_mobile/splash_screen.dart';
 import 'auth/login.dart';
 import 'auth/register.dart';
+import 'screens/profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,11 +31,12 @@ class MyApp extends StatelessWidget {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
         useMaterial3: true,
       ),
-      home: SignInPage(),
+      home: const SplashScreen(), // Set SplashScreen as the initial screen
       routes: {
-        '/main': (context) => MainScreen(),
-        '/login': (context) => SignInPage(),
-        '/register': (context) => SignUpPage(),
+        '/main': (context) => const MainScreen(),
+        '/login': (context) => const SignInPage(),
+        '/register': (context) => const SignUpPage(),
+        '/profile': (context) => const Profile(), // Add route for Profile
       },
       debugShowCheckedModeBanner: false,
     );
