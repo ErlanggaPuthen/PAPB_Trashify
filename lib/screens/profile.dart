@@ -106,7 +106,7 @@ class _ProfileState extends State<Profile> {
                     ),
                   ),
                   Text(
-                    'Email Placeholder',
+                    'a@gmail.com',
                     style: const TextStyle(
                       fontSize: 16,
                       color: Colors.white70,
