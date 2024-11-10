@@ -18,6 +18,8 @@ class _SignUpPageState extends State<SignUpPage> {
 
   final _formKey = GlobalKey<FormState>();
   String _errorMessage = '';
+  bool _isPasswordVisible = false;
+  bool _isConfirmPasswordVisible = false;
 
   @override
   void dispose() {
@@ -67,7 +69,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       _buildPasswordField(),
                       const SizedBox(height: 20.0),
                       _buildConfirmPasswordField(),
-                      const SizedBox(height: 20.0),
+                      const SizedBox(height: 10.0),
                       _buildErrorMessage(),
                       ElevatedButton(
                         onPressed: _signUp,
@@ -110,7 +112,7 @@ class _SignUpPageState extends State<SignUpPage> {
                               TextSpan(
                                 text: 'Login',
                                 style: TextStyle(
-                                  color: Color(0xff098A4E), // Warna hijau
+                                  color: Color(0xff098A4E),
                                   decoration: TextDecoration.underline,
                                 ),
                               ),
@@ -138,15 +140,15 @@ class _SignUpPageState extends State<SignUpPage> {
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat gak fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat di enable
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         prefixIcon: const Icon(Icons.email),
       ),
@@ -162,24 +164,34 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _buildPasswordField() {
     return TextFormField(
       controller: _passwordController,
-      obscureText: true,
+      obscureText: !_isPasswordVisible,
       decoration: InputDecoration(
         hintText: 'Password',
         fillColor: Colors.white,
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border hijau
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
           borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         prefixIcon: const Icon(Icons.lock),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _isPasswordVisible ? Icons.visibility : Icons.visibility_off,
+          ),
+          onPressed: () {
+            setState(() {
+              _isPasswordVisible = !_isPasswordVisible;
+            });
+          },
+        ),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -193,24 +205,34 @@ class _SignUpPageState extends State<SignUpPage> {
   Widget _buildConfirmPasswordField() {
     return TextFormField(
       controller: _confirmPasswordController,
-      obscureText: true,
+      obscureText: !_isConfirmPasswordVisible,
       decoration: InputDecoration(
         hintText: 'Confirm Password',
         fillColor: Colors.white,
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border hijau
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
           borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         prefixIcon: const Icon(Icons.lock),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
+          ),
+          onPressed: () {
+            setState(() {
+              _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
+            });
+          },
+        ),
       ),
       validator: (value) {
         if (value != _passwordController.text) {
@@ -236,12 +258,45 @@ class _SignUpPageState extends State<SignUpPage> {
       User? user = await _auth.signUpWithEmailAndPassword(email, password);
 
       if (user != null) {
-        // Navigasi ke MainScreen setelah registrasi berhasil
-        Navigator.pushReplacementNamed(context, "/home");
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Berhasil'),
+            content: const Text('Akun berhasil dibuat. Silakan login.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Tutup dialog
+                  Navigator.pushReplacementNamed(context, "/login");
+                },
+                child: const Text(
+                  'Oke',
+                  style: TextStyle(color: Color(0xff098A4E)), // Warna teks "Oke" pada pop-up berhasil
+                ),
+              ),
+            ],
+          ),
+        );
       } else {
-        setState(() {
-          _errorMessage = 'Error! Please try again.';
-        });
+        // Tampilkan dialog error
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Error'),
+            content: const Text('Email yang Anda masukkan sudah terdaftar.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Tutup dialog
+                },
+                child: const Text(
+                  'Oke',
+                  style: TextStyle(color: Colors.red), // Warna teks "Oke" pada pop-up error
+                ),
+              ),
+            ],
+          ),
+        );
       }
     }
   }

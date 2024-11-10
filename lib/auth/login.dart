@@ -18,6 +18,7 @@ class _SignInPageState extends State<SignInPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String? _errorMessage;
+  bool _isObscured = true; // Variabel untuk kontrol visibilitas password
 
   @override
   void dispose() {
@@ -56,8 +57,8 @@ class _SignInPageState extends State<SignInPage> {
                       ClipOval(
                         child: Image.asset(
                           'assets/trashify.png',
-                          width: 110,
-                          height: 110,
+                          width: 100,
+                          height: 100,
                         ),
                       ),
                       const SizedBox(height: 20.0),
@@ -85,7 +86,7 @@ class _SignInPageState extends State<SignInPage> {
                             TextSpan(
                               text: 'Daftar',
                               style: const TextStyle(
-                                color: Color(0xff098A4E), // Mengubah warna menjadi hijau
+                                color: Color(0xff098A4E),
                                 decoration: TextDecoration.underline,
                               ),
                               recognizer: TapGestureRecognizer()
@@ -107,8 +108,6 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-
-
   Widget _buildEmailField() {
     return TextFormField(
       controller: _emailController,
@@ -118,15 +117,15 @@ class _SignInPageState extends State<SignInPage> {
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat tidak fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat di-enable
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         prefixIcon: const Icon(Icons.email),
       ),
@@ -139,28 +138,37 @@ class _SignInPageState extends State<SignInPage> {
     );
   }
 
-
   Widget _buildPasswordField() {
     return TextFormField(
       controller: _passwordController,
-      obscureText: true,
+      obscureText: _isObscured,
       decoration: InputDecoration(
         hintText: 'Password',
         fillColor: Colors.white,
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat tidak fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat fokus
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0), // Border saat di-enable
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
         ),
         prefixIcon: const Icon(Icons.lock),
+        suffixIcon: IconButton(
+          icon: Icon(
+            _isObscured ? Icons.visibility : Icons.visibility_off,
+          ),
+          onPressed: () {
+            setState(() {
+              _isObscured = !_isObscured;
+            });
+          },
+        ),
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
@@ -208,12 +216,12 @@ class _SignInPageState extends State<SignInPage> {
 
   void _signIn() async {
     if (!_formKey.currentState!.validate()) {
-      return; // Tidak valid, keluar dari fungsi
+      return;
     }
 
     setState(() {
-      _isLoading = true; // Tampilkan loading
-      _errorMessage = null; // Reset error message
+      _isLoading = true;
+      _errorMessage = null;
     });
 
     String email = _emailController.text;
@@ -227,7 +235,7 @@ class _SignInPageState extends State<SignInPage> {
     } catch (e) {
       setState(() {
         _errorMessage = 'Login failed: ${e.toString()}';
-        _isLoading = false; // Hentikan loading
+        _isLoading = false;
       });
     }
   }
