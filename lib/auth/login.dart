@@ -161,7 +161,7 @@ class _SignInPageState extends State<SignInPage> {
         prefixIcon: const Icon(Icons.lock),
         suffixIcon: IconButton(
           icon: Icon(
-            _isObscured ? Icons.visibility : Icons.visibility_off,
+            _isObscured ? Icons.visibility_off : Icons.visibility,
           ),
           onPressed: () {
             setState(() {
@@ -230,6 +230,20 @@ class _SignInPageState extends State<SignInPage> {
     try {
       User? user = await _auth.signInWithEmailAndPassword(email, password);
       if (user != null) {
+        // Menampilkan pop-up berhasil tanpa tombol "Oke"
+        showDialog(
+          context: context,
+          barrierDismissible: false,
+          builder: (context) => AlertDialog(
+            title: const Text("Login Berhasil"),
+            content: const Text("Selamat datang!"),
+          ),
+        );
+
+        // Tunggu beberapa detik sebelum beralih ke halaman utama
+        await Future.delayed(const Duration(seconds: 2));
+
+        Navigator.pop(context); // Tutup pop-up
         Navigator.pushReplacementNamed(context, "/main");
       }
     } catch (e) {
