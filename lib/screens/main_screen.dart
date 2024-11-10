@@ -54,10 +54,6 @@ class _MainScreenState extends State<MainScreen> {
           backgroundColor: Colors.white,
           elevation: 3.0,
           actions: [
-            IconButton(
-              icon: const Icon(Icons.logout),
-              onPressed: _logout, // Fungsi logout ketika tombol ditekan
-            ),
           ],
         ),
       ),
