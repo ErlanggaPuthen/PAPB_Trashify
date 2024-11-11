@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'home_screen.dart'; // Import file home_screen
 import 'hasil_riwayat_prediksi.dart';
-import 'profile.dart';
+// import 'profile.dart';
 import 'package:trashify_mobile/services/firebase_auth_services.dart'; // Pastikan import ini ada
 
 class MainScreen extends StatefulWidget {
@@ -19,7 +19,7 @@ class _MainScreenState extends State<MainScreen> {
   static const List<Widget> _widgetOptions = <Widget>[
     HomeScreen(),
     HasilRiwayatPrediksi(riwayatPrediksi: []),
-    Profile(),
+    // Profile(),
   ];
 
   void _onItemTapped(int index) {
