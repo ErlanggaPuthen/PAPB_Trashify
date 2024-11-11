@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  final String _baseUrl = 'http://192.168.1.183:5000/predict';
+  final String _baseUrl = 'http://192.168.1.25:5000/predict';
 
   Future<Map<String, dynamic>> classifyImage(File image) async {
     try {

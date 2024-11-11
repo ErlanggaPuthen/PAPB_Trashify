@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:trashify_mobile/services/api_service.dart';
-import 'hasil_riwayat_prediksi.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,7 +14,6 @@ class _HomeScreenState extends State<HomeScreen> {
   File? _selectedImage;
   String? _result;
   final ApiService _apiService = ApiService();
-  List<Map<String, dynamic>> _riwayatPrediksi = [];
 
   Future<void> _pickImage(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
@@ -37,20 +35,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
       setState(() {
         _result = 'Kelas: ${result['class']} | Kepercayaan: ${result['confidence']}%';
-        _riwayatPrediksi.add({
-          'judul': result['class'],
-          'tanggal': DateTime.now().toString(),
-          'status': 'Sukses',
-        });
       });
-
-      // Navigasi otomatis ke halaman Riwayat Prediksi setelah klasifikasi berhasil
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => HasilRiwayatPrediksi(riwayatPrediksi: _riwayatPrediksi),
-        ),
-      );
     } catch (e) {
       setState(() {
         _result = 'Terjadi kesalahan saat mengirim gambar: $e';
@@ -64,61 +49,62 @@ class _HomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
         title: const Text('Klasifikasi Sampah'),
         backgroundColor: Colors.green,
-        actions: [
-          IconButton(
-            icon: const Icon(Icons.history),
-            onPressed: () {
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => HasilRiwayatPrediksi(riwayatPrediksi: _riwayatPrediksi),
-                ),
-              );
-            },
-          ),
-        ],
       ),
       body: Center(
-        child: SingleChildScrollView(
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              // Menampilkan gambar kosongan jika belum ada gambar yang dipilih
-              _selectedImage == null
-                  ? Image.asset('assets/placeholder.png', height: 250, width: 250) // Gambar placeholder
-                  : Image.file(_selectedImage!, height: 250, width: 250),
-              const SizedBox(height: 20),
-              ElevatedButton.icon(
-                onPressed: () => _pickImage(ImageSource.gallery),
-                icon: const Icon(Icons.photo),
-                label: const Text('Pilih Gambar dari Galeri'),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            // Kotak yang mengelilingi gambar dan teks hasil klasifikasi
+            Container(
+              padding: const EdgeInsets.all(10),
+              margin: const EdgeInsets.all(20),
+              decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey),
+                borderRadius: BorderRadius.circular(10),
               ),
-              const SizedBox(height: 10),
-              ElevatedButton.icon(
-                onPressed: () => _pickImage(ImageSource.camera),
-                icon: const Icon(Icons.camera_alt),
-                label: const Text('Ambil Gambar dari Kamera'),
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+              child: Column(
+                children: [
+                  // Tampilkan gambar yang dipilih atau placeholder
+                  Container(
+                    height: 250,
+                    width: 250,
+                    decoration: BoxDecoration(
+                      border: Border.all(color: Colors.grey),
+                      borderRadius: BorderRadius.circular(10),
+                    ),
+                    child: _selectedImage == null
+                        ? Center(
+                            child: Text('Pilih gambar', style: TextStyle(color: Colors.grey)),
+                          )
+                        : Image.file(_selectedImage!, fit: BoxFit.cover),
+                  ),
+                  const SizedBox(height: 20),
+                  // Teks hasil klasifikasi
+                  if (_result != null)
+                    Text(
+                      _result!,
+                      textAlign: TextAlign.center,
+                      style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                    ),
+                ],
               ),
-              const SizedBox(height: 20),
-              if (_selectedImage != null)
-                ElevatedButton(
-                  onPressed: _classifyImage,
-                  style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
-                  child: const Text('Klasifikasi Gambar'),
-                ),
-              const SizedBox(height: 20),
-              if (_result != null)
-                Text(
-                  _result!,
-                  textAlign: TextAlign.center,
-                  style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
-                ),
-            ],
-          ),
+            ),
+            // Tombol Klasifikasi Gambar
+            if (_selectedImage != null)
+              ElevatedButton(
+                onPressed: _classifyImage,
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                child: const Text('Klasifikasi Gambar'),
+              ),
+          ],
         ),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _pickImage(ImageSource.gallery), // Pilih dari galeri saat ditekan
+        child: const Icon(Icons.add),
+        backgroundColor: Colors.green,
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }
