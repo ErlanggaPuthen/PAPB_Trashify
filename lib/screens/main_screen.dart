@@ -70,10 +70,10 @@ class _MainScreenState extends State<MainScreen> {
             icon: Icon(Icons.history),
             label: 'Riwayat Prediksi',
           ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: 'Profile',
-          ),
+          // BottomNavigationBarItem(
+          //   icon: Icon(Icons.person),
+          //   label: 'Profile',
+          // ),
         ],
         currentIndex: _selectedIndex,
         selectedItemColor: const Color(0xff03ac0e),
