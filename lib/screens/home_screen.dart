@@ -46,10 +46,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Klasifikasi Sampah'),
-        backgroundColor: Colors.green,
-      ),
+      // appBar: AppBar(
+      //   title: const Text('Klasifikasi Sampah'),
+      //   backgroundColor: Colors.green,
+      // ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -69,7 +69,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 250,
                     width: 250,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Colors.grey),
+                      border: Border.all(color: Color(0xff098A4E)),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: _selectedImage == null
@@ -93,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (_selectedImage != null)
               ElevatedButton(
                 onPressed: _classifyImage,
-                style: ElevatedButton.styleFrom(backgroundColor: Colors.green),
+                style: ElevatedButton.styleFrom(backgroundColor: Color(0xff098A4E)),
                 child: const Text('Klasifikasi Gambar'),
               ),
           ],

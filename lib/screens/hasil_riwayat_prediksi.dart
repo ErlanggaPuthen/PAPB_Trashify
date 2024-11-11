@@ -24,7 +24,7 @@ class HasilRiwayatPrediksi extends StatelessWidget {
                   child: ListTile(
                     leading: Icon(
                       item['status'] == 'Sukses' ? Icons.check_circle : Icons.error,
-                      color: item['status'] == 'Sukses' ? Colors.green : Colors.red,
+                      color: item['status'] == 'Sukses' ? Color(0xff098A4E) : Colors.red,
                       size: 40,
                     ),
                     title: Text(
