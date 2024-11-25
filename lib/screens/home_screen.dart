@@ -36,28 +36,50 @@ class _HomeScreenState extends State<HomeScreen> {
       // Mengirim gambar ke API
       final response = await _apiService.classifyImage(_selectedImage!);
 
+      print('Response dari API: $response'); // Debugging respons API
+
       if (response.isNotEmpty) {
-        // Interpretasi kelas menjadi teks "Organik" atau "Anorganik"
-        final String category = response['class'] == 0 ? 'Organik' : 'Anorganik';
+        // Pastikan kelas dan confidence diambil dengan benar
+        final int? classIndex = response['class'] is int
+            ? response['class']
+            : int.tryParse(response['class'].toString());
+        final double? confidence = response['confidence'] is double
+            ? response['confidence']
+            : double.tryParse(response['confidence'].toString());
 
-        // Konversi confidence menjadi persen dengan 2 desimal
-        final String confidence =
-            (response['confidence'] * 100).toStringAsFixed(2);
+        if (classIndex != null && confidence != null) {
+          // Tentukan label kelas berdasarkan nilai classIndex
+          final String category = classIndex == 0 ? 'Organik' : 'Anorganik';
 
-        setState(() {
-          _result = 'Kelas: $category | Kepercayaan: $confidence%';
-        });
+          // Konversi confidence ke persentase
+          final String confidencePercent = confidence.toStringAsFixed(2);
+
+          setState(() {
+            _result = 'Kelas: $category | Kepercayaan: $confidencePercent%';
+          });
+        } else {
+          // Jika response tidak valid
+          setState(() {
+            _result = 'Response API tidak valid. Periksa struktur respons.';
+          });
+        }
       } else {
         setState(() {
-          _result = "Gagal mengklasifikasikan gambar.";
+          _result = "Tidak ada respons dari API.";
         });
       }
     } catch (e) {
+      // Tangkap error yang terjadi
+      print('Error: $e');
       setState(() {
         _result = "Terjadi kesalahan: $e";
       });
     }
   }
+
+
+
+
 
   @override
   Widget build(BuildContext context) {
