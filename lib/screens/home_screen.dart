@@ -37,9 +37,15 @@ class _HomeScreenState extends State<HomeScreen> {
       final response = await _apiService.classifyImage(_selectedImage!);
 
       if (response.isNotEmpty) {
+        // Interpretasi kelas menjadi teks "Organik" atau "Anorganik"
+        final String category = response['class'] == 0 ? 'Organik' : 'Anorganik';
+
+        // Konversi confidence menjadi persen dengan 2 desimal
+        final String confidence =
+            (response['confidence'] * 100).toStringAsFixed(2);
+
         setState(() {
-          _result =
-              'Kelas: ${response['class']} | Kepercayaan: ${(response['confidence'] * 100).toStringAsFixed(2)}%';
+          _result = 'Kelas: $category | Kepercayaan: $confidence%';
         });
       } else {
         setState(() {
@@ -80,7 +86,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: _selectedImage == null
                         ? Center(
-                            child: Text('Pilih gambar', style: TextStyle(color: Colors.grey)),
+                            child: Text('Pilih gambar',
+                                style: TextStyle(color: Colors.grey)),
                           )
                         : Image.file(_selectedImage!, fit: BoxFit.cover),
                   ),
@@ -90,7 +97,8 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text(
                       _result!,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                          fontSize: 18.0, fontWeight: FontWeight.bold),
                     ),
                 ],
               ),
@@ -99,14 +107,15 @@ class _HomeScreenState extends State<HomeScreen> {
             if (_selectedImage != null)
               ElevatedButton(
                 onPressed: _classifyImage,
-                style: ElevatedButton.styleFrom(backgroundColor: Color(0xff098A4E)),
+                style: ElevatedButton.styleFrom(
+                    backgroundColor: Color(0xff098A4E)),
                 child: const Text('Klasifikasi Gambar'),
               ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _pickImage(ImageSource.gallery), // Pilih dari galeri saat ditekan
+        onPressed: () => _pickImage(ImageSource.gallery), // Pilih dari galeri
         child: const Icon(Icons.add),
         backgroundColor: Colors.green,
       ),

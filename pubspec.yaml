@@ -41,7 +41,6 @@ dependencies:
   image: ^4.3.0
   tflite: ^1.1.2
   tflite_flutter: ^0.10.0
-  get:
 
 dev_dependencies:
   flutter_test:
@@ -70,7 +69,7 @@ flutter:
     - assets/model_sampah.tflite
     - assets/labels.txt
     - assets/trashify.png
-    - assets/trashify.png
+    - assets/trashify2.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
