@@ -28,6 +28,10 @@ android {
         targetSdk = 34
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+
+        ndk {
+            abiFilters "armeabi-v7a", "arm64-v8a", "x86", "x86_64" // Dukungan untuk berbagai arsitektur
+        }
     }
 
     buildFeatures {
@@ -50,4 +54,12 @@ android {
 
 flutter {
     source = "../.."
+}
+
+dependencies {
+    // Tambahkan dependency TensorFlow Lite
+    implementation 'org.tensorflow:tensorflow-lite:2.12.0' // Library utama TFLite
+
+    // Opsional: Tambahkan Task Library TensorFlow Lite untuk klasifikasi dan visi komputer
+    implementation 'org.tensorflow:tensorflow-lite-task-vision:2.12.0'
 }
