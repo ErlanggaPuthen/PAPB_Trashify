@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:trashify_mobile/services/api_service.dart';
+import 'package:trashify_mobile/services/tflite.dart'; // Import service TFLite
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,8 +13,25 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   File? _selectedImage;
   String? _result;
-  final ApiService _apiService = ApiService();
 
+  @override
+  void initState() {
+    super.initState();
+    _loadModel();
+  }
+
+  @override
+  void dispose() {
+    TFLiteService.closeModel(); // Menutup model saat layar dihancurkan
+    super.dispose();
+  }
+
+  // Fungsi untuk memuat model TensorFlow Lite
+  Future<void> _loadModel() async {
+    await TFLiteService.loadModel(); // Muat model menggunakan TFLiteService
+  }
+
+  // Fungsi untuk memilih gambar dari galeri
   Future<void> _pickImage(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: source);
@@ -27,18 +44,26 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // Fungsi untuk mengklasifikasikan gambar
   Future<void> _classifyImage() async {
     if (_selectedImage == null) return;
 
     try {
-      final result = await _apiService.classifyImage(_selectedImage!);
+      // Menjalankan model TensorFlow Lite pada gambar
+      final result = await TFLiteService.classifyImage(_selectedImage!.path);
 
-      setState(() {
-        _result = 'Kelas: ${result['class']} | Kepercayaan: ${result['confidence']}%';
-      });
+      if (result != null) {
+        setState(() {
+          _result = 'Kelas: ${result['class']} | Kepercayaan: ${result['confidence']}%';
+        });
+      } else {
+        setState(() {
+          _result = "Gagal mengklasifikasikan gambar.";
+        });
+      }
     } catch (e) {
       setState(() {
-        _result = 'Terjadi kesalahan saat mengirim gambar: $e';
+        _result = "Terjadi kesalahan: $e";
       });
     }
   }
@@ -46,10 +71,6 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Klasifikasi Sampah'),
-      //   backgroundColor: Colors.green,
-      // ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
