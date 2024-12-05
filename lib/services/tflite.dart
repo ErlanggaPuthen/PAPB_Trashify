@@ -1,4 +1,4 @@
-import 'package:tflite/tflite.dart';
+import 'package:tflite/tflite_v2.dart';
 
 class TFLiteService {
   /// Memuat model TFLite
