@@ -1,44 +1,46 @@
-// import 'package:tflite/tflite.dart';
+import 'package:tflite/tflite.dart';
 
-// class TFLiteService {
-//   // Memuat model TensorFlow Lite
-//   static Future<void> loadModel() async {
-//     try {
-//       String? res = await Tflite.loadModel(
-//         model: "assets/model_sampah.tflite", // Ganti dengan path model Anda
-//         labels: "assets/labels.txt",         // Ganti dengan path label Anda
-//       );
-//       print("Model loaded: $res");
-//     } catch (e) {
-//       print("Error loading model: $e");
-//     }
-//   }
+class TFLiteService {
+  /// Memuat model TFLite
+  static Future<void> loadModel() async {
+    try {
+      String? result = await Tflite.loadModel(
+        model: 'assets/model_sampah.tflite', // Path ke file model
+        labels: 'assets/labels.txt',         // Path ke file label
+      );
+      print("Model loaded: $result");
+    } catch (e) {
+      print("Error loading model: $e");
+      rethrow;
+    }
+  }
 
-//   // Menjalankan model pada gambar
-//   static Future<Map<String, dynamic>?> classifyImage(String imagePath) async {
-//     try {
-//       var recognitions = await Tflite.runModelOnImage(
-//         path: imagePath,
-//         numResults: 2, // Jumlah label yang diinginkan
-//         threshold: 0.5, // Ambang batas
-//         imageMean: 0.0, // Normalisasi gambar
-//         imageStd: 255.0, // Normalisasi gambar
-//       );
+  /// Menjalankan klasifikasi gambar
+  static Future<Map<String, dynamic>?> classifyImage(String imagePath) async {
+    try {
+      // Melakukan inferensi dengan model
+      List<dynamic>? recognitions = await Tflite.runModelOnImage(
+        path: imagePath, // Path gambar
+        imageMean: 127.5, // Nilai rata-rata normalisasi gambar
+        imageStd: 127.5,  // Standar deviasi normalisasi gambar
+        numResults: 1,    // Ambil hanya hasil terbaik
+        threshold: 0.5,   // Confidence threshold minimum
+      );
 
-//       if (recognitions != null && recognitions.isNotEmpty) {
-//         return {
-//           "class": recognitions[0]['label'], // Nama label
-//           "confidence": (recognitions[0]['confidence'] * 100).toStringAsFixed(2),
-//         };
-//       }
-//     } catch (e) {
-//       print("Error classifying image: $e");
-//     }
-//     return null;
-//   }
+      if (recognitions != null && recognitions.isNotEmpty) {
+        return {
+          'class': recognitions[0]['label'],       // Kelas hasil klasifikasi
+          'confidence': (recognitions[0]['confidence'] * 100).toStringAsFixed(2), // Confidence
+        };
+      }
+    } catch (e) {
+      print("Error during classification: $e");
+    }
+    return null;
+  }
 
-//   // Menutup model setelah selesai
-//   static Future<void> closeModel() async {
-//     await Tflite.close();
-//   }
-// }
+  /// Menutup model untuk membebaskan resource
+  static Future<void> closeModel() async {
+    await Tflite.close();
+  }
+}

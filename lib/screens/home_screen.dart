@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:trashify_mobile/services/api_service.dart'; // Import ApiService
+import 'package:trashify_mobile/services/tflite.dart'; // Import service TFLite
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,7 +13,28 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   File? _selectedImage;
   String? _result;
-  final ApiService _apiService = ApiService(); // Inisialisasi ApiService
+
+  @override
+  void initState() {
+    super.initState();
+    _loadModel();
+  }
+
+  @override
+  void dispose() {
+    TFLiteService.closeModel(); // Menutup model saat layar dihancurkan
+    super.dispose();
+  }
+
+  // Fungsi untuk memuat model TensorFlow Lite
+  Future<void> _loadModel() async {
+    try {
+      await TFLiteService.loadModel(); // Muat model menggunakan TFLiteService
+      print("Model berhasil dimuat");
+    } catch (e) {
+      print("Gagal memuat model: $e");
+    }
+  }
 
   // Fungsi untuk memilih gambar dari galeri
   Future<void> _pickImage(ImageSource source) async {
@@ -28,58 +49,29 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // Fungsi untuk mengklasifikasikan gambar menggunakan API
+  // Fungsi untuk mengklasifikasikan gambar
   Future<void> _classifyImage() async {
     if (_selectedImage == null) return;
 
     try {
-      // Mengirim gambar ke API
-      final response = await _apiService.classifyImage(_selectedImage!);
+      // Menjalankan model TensorFlow Lite pada gambar
+      final result = await TFLiteService.classifyImage(_selectedImage!.path);
 
-      print('Response dari API: $response'); // Debugging respons API
-
-      if (response.isNotEmpty) {
-        // Pastikan kelas dan confidence diambil dengan benar
-        final int? classIndex = response['class'] is int
-            ? response['class']
-            : int.tryParse(response['class'].toString());
-        final double? confidence = response['confidence'] is double
-            ? response['confidence']
-            : double.tryParse(response['confidence'].toString());
-
-        if (classIndex != null && confidence != null) {
-          // Tentukan label kelas berdasarkan nilai classIndex
-          final String category = classIndex == 0 ? 'Organik' : 'Anorganik';
-
-          // Konversi confidence ke persentase
-          final String confidencePercent = confidence.toStringAsFixed(2);
-
-          setState(() {
-            _result = 'Kelas: $category | Kepercayaan: $confidencePercent%';
-          });
-        } else {
-          // Jika response tidak valid
-          setState(() {
-            _result = 'Response API tidak valid. Periksa struktur respons.';
-          });
-        }
+      if (result != null) {
+        setState(() {
+          _result = 'Kelas: ${result['class']} | Kepercayaan: ${result['confidence']}%';
+        });
       } else {
         setState(() {
-          _result = "Tidak ada respons dari API.";
+          _result = "Gagal mengklasifikasikan gambar.";
         });
       }
     } catch (e) {
-      // Tangkap error yang terjadi
-      print('Error: $e');
       setState(() {
         _result = "Terjadi kesalahan: $e";
       });
     }
   }
-
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -108,8 +100,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     ),
                     child: _selectedImage == null
                         ? Center(
-                            child: Text('Pilih gambar',
-                                style: TextStyle(color: Colors.grey)),
+                            child: Text('Pilih gambar', style: TextStyle(color: Colors.grey)),
                           )
                         : Image.file(_selectedImage!, fit: BoxFit.cover),
                   ),
@@ -119,8 +110,7 @@ class _HomeScreenState extends State<HomeScreen> {
                     Text(
                       _result!,
                       textAlign: TextAlign.center,
-                      style: const TextStyle(
-                          fontSize: 18.0, fontWeight: FontWeight.bold),
+                      style: const TextStyle(fontSize: 18.0, fontWeight: FontWeight.bold),
                     ),
                 ],
               ),
@@ -129,17 +119,16 @@ class _HomeScreenState extends State<HomeScreen> {
             if (_selectedImage != null)
               ElevatedButton(
                 onPressed: _classifyImage,
-                style: ElevatedButton.styleFrom(
-                    backgroundColor: Color(0xff098A4E)),
+                style: ElevatedButton.styleFrom(backgroundColor: Color(0xff098A4E)),
                 child: const Text('Klasifikasi Gambar'),
               ),
           ],
         ),
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () => _pickImage(ImageSource.gallery), // Pilih dari galeri
+        onPressed: () => _pickImage(ImageSource.gallery),
+        backgroundColor: Colors.green, // Pilih dari galeri saat ditekan
         child: const Icon(Icons.add),
-        backgroundColor: Colors.green,
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
