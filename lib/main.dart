@@ -4,7 +4,7 @@ import 'package:trashify_mobile/screens/main_screen.dart';
 import 'package:trashify_mobile/splash_screen.dart';
 import 'auth/login.dart';
 import 'auth/register.dart';
-// import 'screens/profile.dart';
+import 'screens/profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -36,7 +36,7 @@ class MyApp extends StatelessWidget {
         '/main': (context) => const MainScreen(),
         '/login': (context) => const SignInPage(),
         '/register': (context) => const SignUpPage(),
-        // '/profile': (context) => const Profile(), // Add route for Profile
+        '/profile': (context) => const Profile(),
       },
       debugShowCheckedModeBanner: false,
     );
