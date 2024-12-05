@@ -29,8 +29,8 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> _logout() async {
     try {
-      final FirebaseAuthService _auth = FirebaseAuthService();
-      await _auth.signOut();
+      final FirebaseAuthService auth = FirebaseAuthService();
+      await auth.signOut();
       Navigator.pushReplacementNamed(context, "/login");
     } catch (e) {
       _showError("Gagal logout: $e");

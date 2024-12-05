@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 class HasilRiwayatPrediksi extends StatelessWidget {
   final List<Map<String, dynamic>> riwayatPrediksi;
 
-  const HasilRiwayatPrediksi({Key? key, required this.riwayatPrediksi}) : super(key: key);
+  const HasilRiwayatPrediksi({super.key, required this.riwayatPrediksi});
 
   @override
   Widget build(BuildContext context) {
