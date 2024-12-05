@@ -244,7 +244,7 @@ class _SignInPageState extends State<SignInPage> {
         await Future.delayed(const Duration(seconds: 2));
 
         Navigator.pop(context); // Tutup pop-up
-        Navigator.pushReplacementNamed(context, "/profile");
+        Navigator.pushReplacementNamed(context, "/main");
       }
     } catch (e) {
       setState(() {
