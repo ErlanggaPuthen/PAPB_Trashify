@@ -10,6 +10,11 @@ android {
     compileSdk = 34
     ndkVersion = flutter.ndkVersion
 
+    aaptOptions {
+        noCompress 'tflite'
+        noCompress 'lite'
+    }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
@@ -24,7 +29,7 @@ android {
         applicationId = "com.example.trashify_mobile"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = 34
+        minSdk = 26
         targetSdk = 34
         versionCode = flutter.versionCode
         versionName = flutter.versionName
@@ -45,21 +50,8 @@ android {
             signingConfig = signingConfigs.debug
         }
     }
-
-    aaptOptions {
-        noCompress 'tflite'
-        noCompress 'lite'
-    }
 }
 
 flutter {
     source = "../.."
-}
-
-dependencies {
-    // Tambahkan dependency TensorFlow Lite
-    implementation 'org.tensorflow:tensorflow-lite:2.11.0' // Library utama TFLite
-
-    // Opsional: Tambahkan Task Library TensorFlow Lite untuk klasifikasi dan visi komputer
-    implementation 'org.tensorflow:tensorflow-lite-task-vision:0.4.4'
 }
