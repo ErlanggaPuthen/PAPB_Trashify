@@ -1,5 +1,6 @@
 plugins {
     id "com.android.application"
+    id 'com.google.gms.google-services'
     id "kotlin-android"
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id "dev.flutter.flutter-gradle-plugin"
@@ -26,18 +27,13 @@ if (flutterVersionName == null) {
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
-    keystorePropertiesFile.load(new FileInputStream(keystorePropertiesFile))
+    keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
 }
 
 android {
     namespace = "com.example.trashify_mobile"
     compileSdk = 34
     ndkVersion = flutter.ndkVersion
-
-    aaptOptions {
-        noCompress 'tflite'
-        noCompress 'lite'
-    }
 
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
@@ -48,14 +44,18 @@ android {
         jvmTarget = JavaVersion.VERSION_1_8
     }
 
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+    }
+
     defaultConfig {
         // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.example.trashify_mobile"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
-        minSdk = flutter.minSdkVersion
+        minSdk = 23
         targetSdk = flutter.targetSdkVersion
-        versionCode = flutter.versionCode
+        versionCode = flutter.versionCode.toInteger()
         versionName = flutter.versionName
     }
 
@@ -65,10 +65,10 @@ android {
 
      signingConfigs {  
         release {  
-            keyAlias keystoreProperies["keyAlias"]  
-            keyPassword keystoreProperies["keyPassword"]  
-            storeFile file(keystoreProperies["storeFile"])  
-            storePassword keystoreProperies["storePassword"]  
+            keyAlias = keystoreProperties["keyAlias"]  
+            keyPassword = keystoreProperties["keyPassword"]  
+            storeFile = keystoreProperties["storeFile"] ? file(keystoreProperties['storeFile']) : null
+            storePassword = keystoreProperties["storePassword"]  
         }  
     } 
 
@@ -87,5 +87,7 @@ flutter {
 }
 
 dependencies {
-    implementation ("com.google.android.material:material:1.12.0")
+    implementation "com.google.android.material:material:1.12.0"
 }
+
+apply plugin: 'com.google.gms.google-services'
