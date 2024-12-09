@@ -26,7 +26,7 @@ class MyApp extends StatelessWidget {
         '/main': (context) => const MainScreen(),
         '/login': (context) => const SignInPage(),
         '/register': (context) => const SignUpPage(),
-        '/profile': (context) => const Profile(), // Add route for Profile
+        '/profile': (context) => const Profile(),
       },
       debugShowCheckedModeBanner: false,
     );
