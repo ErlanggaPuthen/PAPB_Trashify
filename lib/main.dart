@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:trashify_mobile/screens/main_screen.dart';
 import 'package:trashify_mobile/screens/splash_screen.dart';
-import 'auth/login.dart';
-import 'auth/register.dart';
-import 'screens/profile.dart';
+import 'package:trashify_mobile/auth/login.dart';
+import 'package:trashify_mobile/auth/register.dart';
+import 'package:trashify_mobile/screens/profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
