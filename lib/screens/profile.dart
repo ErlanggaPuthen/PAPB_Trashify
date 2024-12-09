@@ -1,25 +1,79 @@
 import 'package:flutter/material.dart';
+import 'package:trashify_mobile/services/api_service.dart';
 
-class Profile extends StatelessWidget {
+class Profile extends StatefulWidget {
   const Profile({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final User? user = FirebaseAuth.instance.currentUser; // Mendapatkan info user dari Firebase
-    final String email = user?.email ?? "Email tidak ditemukan"; // Email user
+  _ProfileState createState() => _ProfileState();
+}
 
+class _ProfileState extends State<Profile> {
+  String email = "Memuat email...";
+  final String token = "your-auth-token"; // Ganti dengan token aktual
+
+  @override
+  void initState() {
+    super.initState();
+    _fetchUserProfile();
+  }
+
+  Future<void> _fetchUserProfile() async {
+    try {
+      final response = await ApiService.getUserProfile(token);
+      if (response['success'] == true) {
+        setState(() {
+          email = response['data']['email'] ?? "Email tidak ditemukan";
+        });
+      } else {
+        setState(() {
+          email = response['message'] ?? "Gagal memuat email";
+        });
+      }
+    } catch (e) {
+      setState(() {
+        email = "Gagal memuat profil: $e";
+      });
+    }
+  }
+
+  Future<void> _logout() async {
+    try {
+      final response = await ApiService.logout(token); // Logout API call
+      if (response['success'] == true) {
+        Navigator.pushReplacementNamed(context, '/login');
+      } else {
+        _showError(response['message'] ?? "Logout gagal");
+      }
+    } catch (e) {
+      _showError("Gagal logout: $e");
+    }
+  }
+
+  void _showError(String message) {
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text(
+          message,
+          style: const TextStyle(color: Colors.white),
+        ),
+      ),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Profile'),
         backgroundColor: Colors.green,
         centerTitle: true,
-        automaticallyImplyLeading: false, // Menghapus tombol back
+        automaticallyImplyLeading: false,
       ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Foto profil kosong
             CircleAvatar(
               radius: 60,
               backgroundColor: Colors.grey[300],
@@ -30,7 +84,6 @@ class Profile extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 20),
-            // Email user
             Text(
               email,
               style: const TextStyle(
@@ -39,12 +92,8 @@ class Profile extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
-            // Tombol logout
             ElevatedButton.icon(
-              onPressed: () async {
-                await FirebaseAuth.instance.signOut(); // Proses logout
-                Navigator.pushReplacementNamed(context, '/login'); // Redirect ke halaman login
-              },
+              onPressed: _logout,
               icon: const Icon(Icons.logout),
               label: const Text("Logout"),
               style: ElevatedButton.styleFrom(

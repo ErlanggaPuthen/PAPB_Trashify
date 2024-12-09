@@ -3,6 +3,8 @@ import 'package:google_fonts/google_fonts.dart';
 import 'home_screen.dart';
 import 'hasil_riwayat_prediksi.dart';
 import 'profile.dart';
+import 'package:trashify_mobile/services/api_service.dart';
+import 'package:shared_preferences/shared_preferences.dart'; // Tambahkan ini untuk menyimpan/memuat token
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -28,9 +30,26 @@ class _MainScreenState extends State<MainScreen> {
 
   Future<void> _logout() async {
     try {
-      final FirebaseAuthService auth = FirebaseAuthService();
-      await auth.signOut();
-      Navigator.pushReplacementNamed(context, "/login");
+      // Ambil token dari SharedPreferences
+      final prefs = await SharedPreferences.getInstance();
+      final token = prefs.getString('token') ?? ''; // Gunakan token yang tersimpan
+
+      if (token.isEmpty) {
+        _showError("Token tidak ditemukan, silakan login ulang.");
+        return;
+      }
+
+      // Panggil API logout
+      final response = await ApiService.logout(token); // Logout API call
+      if (response['success'] == true) {
+        // Hapus token dari SharedPreferences
+        await prefs.remove('token');
+
+        // Arahkan pengguna kembali ke halaman login
+        Navigator.pushReplacementNamed(context, "/login");
+      } else {
+        _showError(response['message'] ?? "Logout gagal");
+      }
     } catch (e) {
       _showError("Gagal logout: $e");
     }
