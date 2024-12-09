@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart'; // Tambahkan ini
 
@@ -111,6 +112,32 @@ class ApiService {
       } else {
         final responseBody = jsonDecode(response.body);
         return {"success": false, "message": responseBody["message"] ?? "Gagal memuat profil"};
+      }
+    } catch (e) {
+      return {"success": false, "message": "Tidak dapat terhubung ke server"};
+    }
+  }
+
+  // Fungsi untuk mengirim gambar dan mendapatkan hasil klasifikasi
+  static Future<Map<String, dynamic>> classifyImage(File image) async {
+    final url = Uri.parse('$baseUrl/predict');
+
+    try {
+      final request = http.MultipartRequest('POST', url)
+        ..files.add(await http.MultipartFile.fromPath('file', image.path)); // Kirim file gambar
+
+      final response = await http.Response.fromStream(await request.send());
+
+      if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+        return {
+          "success": true,
+          "class": responseBody["class"], // Kelas hasil klasifikasi
+          "confidence": responseBody["confidence"], // Kepercayaan hasil klasifikasi
+        };
+      } else {
+        final responseBody = jsonDecode(response.body);
+        return {"success": false, "message": responseBody["message"] ?? "Klasifikasi gagal"};
       }
     } catch (e) {
       return {"success": false, "message": "Tidak dapat terhubung ke server"};
