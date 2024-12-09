@@ -1,4 +1,3 @@
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:trashify_mobile/screens/main_screen.dart';
 import 'package:trashify_mobile/screens/splash_screen.dart';
@@ -8,15 +7,6 @@ import 'screens/profile.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-
-  await Firebase.initializeApp(
-    options: FirebaseOptions(
-      apiKey: 'AIzaSyA1QVtNM9JQxVckSuxIN4Dtje1NzYloPOI',
-      appId: '1:995159347289:android:4fda46401fa2b63902a148',
-      messagingSenderId: '995159347289',
-      projectId: 'trashify-9c313',
-    ),
-  );
   runApp(const MyApp());
 }
 

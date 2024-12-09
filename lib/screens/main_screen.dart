@@ -3,7 +3,6 @@ import 'package:google_fonts/google_fonts.dart';
 import 'home_screen.dart';
 import 'hasil_riwayat_prediksi.dart';
 import 'profile.dart';
-import 'package:trashify_mobile/services/firebase_auth_services.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});

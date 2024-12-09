@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:trashify_mobile/services/firebase_auth_services.dart';
+import 'package:http/http.dart' as http;
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -10,8 +10,6 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
-  final FirebaseAuthService _auth = FirebaseAuthService();
-
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _confirmPasswordController = TextEditingController();
@@ -27,6 +25,59 @@ class _SignUpPageState extends State<SignUpPage> {
     _passwordController.dispose();
     _confirmPasswordController.dispose();
     super.dispose();
+  }
+
+  Future<void> _signUp() async {
+    if (_formKey.currentState?.validate() ?? false) {
+      String email = _emailController.text.trim();
+      String password = _passwordController.text.trim();
+      String apiUrl = "http://127.0.0.1:5000/register"; // Ganti dengan URL server Anda
+
+      try {
+        final response = await http.post(
+          Uri.parse(apiUrl),
+          headers: {"Content-Type": "application/json"},
+          body: jsonEncode({
+            "email": email,
+            "password": password,
+          }),
+        );
+
+        if (response.statusCode == 201) {
+          showDialog(
+            context: context,
+            builder: (context) => AlertDialog(
+              title: const Text('Berhasil'),
+              content: const Text('Akun berhasil dibuat. Silakan login.'),
+              actions: [
+                TextButton(
+                  onPressed: () {
+                    Navigator.pop(context); // Tutup dialog
+                    Navigator.pushReplacementNamed(context, "/login");
+                  },
+                  child: const Text(
+                    'Oke',
+                    style: TextStyle(color: Color(0xff098A4E)),
+                  ),
+                ),
+              ],
+            ),
+          );
+        } else if (response.statusCode == 400) {
+          setState(() {
+            _errorMessage = "Email sudah terdaftar. Gunakan email lain.";
+          });
+        } else {
+          setState(() {
+            _errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
+          });
+        }
+      } catch (e) {
+        setState(() {
+          _errorMessage = "Gagal terhubung ke server.";
+        });
+      }
+    }
   }
 
   @override
@@ -154,7 +205,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please enter your email';
+          return 'Email harus diisi';
         }
         return null;
       },
@@ -195,7 +246,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       validator: (value) {
         if (value == null || value.isEmpty) {
-          return 'Please enter your password';
+          return 'Password harus diisi';
         }
         return null;
       },
@@ -207,7 +258,7 @@ class _SignUpPageState extends State<SignUpPage> {
       controller: _confirmPasswordController,
       obscureText: !_isConfirmPasswordVisible,
       decoration: InputDecoration(
-        hintText: 'Confirm Password',
+        hintText: 'Konfirmasi Password',
         fillColor: Colors.white,
         filled: true,
         border: OutlineInputBorder(
@@ -236,7 +287,7 @@ class _SignUpPageState extends State<SignUpPage> {
       ),
       validator: (value) {
         if (value != _passwordController.text) {
-          return 'Passwords do not match';
+          return 'Password tidak sesuai';
         }
         return null;
       },
@@ -244,60 +295,14 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   Widget _buildErrorMessage() {
-    return Text(
-      _errorMessage,
-      style: const TextStyle(color: Colors.red, fontSize: 14),
-    );
-  }
-
-  void _signUp() async {
-    if (_formKey.currentState?.validate() ?? false) {
-      String email = _emailController.text.trim();
-      String password = _passwordController.text.trim();
-
-      User? user = await _auth.signUpWithEmailAndPassword(email, password);
-
-      if (user != null) {
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Berhasil'),
-            content: const Text('Akun berhasil dibuat. Silakan login.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Tutup dialog
-                  Navigator.pushReplacementNamed(context, "/login");
-                },
-                child: const Text(
-                  'Oke',
-                  style: TextStyle(color: Color(0xff098A4E)), // Warna teks "Oke" pada pop-up berhasil
-                ),
-              ),
-            ],
-          ),
-        );
-      } else {
-        // Tampilkan dialog error
-        showDialog(
-          context: context,
-          builder: (context) => AlertDialog(
-            title: const Text('Error'),
-            content: const Text('Email yang Anda masukkan sudah terdaftar.'),
-            actions: [
-              TextButton(
-                onPressed: () {
-                  Navigator.pop(context); // Tutup dialog
-                },
-                child: const Text(
-                  'Oke',
-                  style: TextStyle(color: Colors.red), // Warna teks "Oke" pada pop-up error
-                ),
-              ),
-            ],
-          ),
-        );
-      }
-    }
+    return _errorMessage.isNotEmpty
+        ? Padding(
+            padding: const EdgeInsets.only(bottom: 10.0),
+            child: Text(
+              _errorMessage,
+              style: const TextStyle(color: Colors.red),
+            ),
+          )
+        : Container();
   }
 }

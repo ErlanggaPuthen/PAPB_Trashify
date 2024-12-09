@@ -1,7 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:trashify_mobile/services/firebase_auth_services.dart';
+import 'package:trashify_mobile/services/api_service.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -11,7 +10,6 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPageState extends State<SignInPage> {
-  final FirebaseAuthService _auth = FirebaseAuthService();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
 
@@ -197,9 +195,8 @@ class _SignInPageState extends State<SignInPage> {
               )
             : Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  const SizedBox(width: 8.0),
-                  const Text(
+                children: const <Widget>[
+                  Text(
                     'Masuk',
                     style: TextStyle(
                       fontFamily: 'CarthagePro',
@@ -228,9 +225,9 @@ class _SignInPageState extends State<SignInPage> {
     String password = _passwordController.text;
 
     try {
-      User? user = await _auth.signInWithEmailAndPassword(email, password);
-      if (user != null) {
-        // Menampilkan pop-up berhasil tanpa tombol "Oke"
+      final response = await ApiService.login(email, password);
+
+      if (response['success'] == true) {
         showDialog(
           context: context,
           barrierDismissible: false,
@@ -240,15 +237,21 @@ class _SignInPageState extends State<SignInPage> {
           ),
         );
 
-        // Tunggu beberapa detik sebelum beralih ke halaman utama
         await Future.delayed(const Duration(seconds: 2));
 
         Navigator.pop(context); // Tutup pop-up
         Navigator.pushReplacementNamed(context, "/main");
+      } else {
+        setState(() {
+          _errorMessage = response['message'] ?? 'Login failed.';
+        });
       }
     } catch (e) {
       setState(() {
         _errorMessage = 'Login failed: ${e.toString()}';
+      });
+    } finally {
+      setState(() {
         _isLoading = false;
       });
     }
