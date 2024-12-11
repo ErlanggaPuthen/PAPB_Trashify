@@ -16,7 +16,7 @@ class _SignInPageState extends State<SignInPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String? _errorMessage;
-  bool _isObscured = true; // Variabel untuk kontrol visibilitas password
+  bool _isObscured = true;
 
   @override
   void dispose() {
@@ -54,7 +54,7 @@ class _SignInPageState extends State<SignInPage> {
                       const SizedBox(height: 20.0),
                       ClipOval(
                         child: Image.asset(
-                          'assets/trashify.png',
+                          'assets/images/trashify.png',
                           width: 100,
                           height: 100,
                         ),

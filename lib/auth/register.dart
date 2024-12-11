@@ -1,6 +1,5 @@
-import 'dart:convert';
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
+import 'package:trashify_mobile/services/api_service.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -31,50 +30,33 @@ class _SignUpPageState extends State<SignUpPage> {
     if (_formKey.currentState?.validate() ?? false) {
       String email = _emailController.text.trim();
       String password = _passwordController.text.trim();
-      String apiUrl = "http://127.0.0.1:5000/register"; // Ganti dengan URL server Anda
 
-      try {
-        final response = await http.post(
-          Uri.parse(apiUrl),
-          headers: {"Content-Type": "application/json"},
-          body: jsonEncode({
-            "email": email,
-            "password": password,
-          }),
-        );
+      // Menggunakan ApiService untuk proses registrasi
+      final result = await ApiService.register(email, password);
 
-        if (response.statusCode == 201) {
-          showDialog(
-            context: context,
-            builder: (context) => AlertDialog(
-              title: const Text('Berhasil'),
-              content: const Text('Akun berhasil dibuat. Silakan login.'),
-              actions: [
-                TextButton(
-                  onPressed: () {
-                    Navigator.pop(context); // Tutup dialog
-                    Navigator.pushReplacementNamed(context, "/login");
-                  },
-                  child: const Text(
-                    'Oke',
-                    style: TextStyle(color: Color(0xff098A4E)),
-                  ),
+      if (result['success']) {
+        showDialog(
+          context: context,
+          builder: (context) => AlertDialog(
+            title: const Text('Berhasil'),
+            content: const Text('Akun berhasil dibuat. Silakan login.'),
+            actions: [
+              TextButton(
+                onPressed: () {
+                  Navigator.pop(context); // Tutup dialog
+                  Navigator.pushReplacementNamed(context, "/login");
+                },
+                child: const Text(
+                  'Oke',
+                  style: TextStyle(color: Color(0xff098A4E)),
                 ),
-              ],
-            ),
-          );
-        } else if (response.statusCode == 400) {
-          setState(() {
-            _errorMessage = "Email sudah terdaftar. Gunakan email lain.";
-          });
-        } else {
-          setState(() {
-            _errorMessage = "Terjadi kesalahan. Silakan coba lagi.";
-          });
-        }
-      } catch (e) {
+              ),
+            ],
+          ),
+        );
+      } else {
         setState(() {
-          _errorMessage = "Gagal terhubung ke server.";
+          _errorMessage = result['message'];
         });
       }
     }
@@ -109,7 +91,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       const SizedBox(height: 20.0),
                       ClipOval(
                         child: Image.asset(
-                          'assets/trashify.png',
+                          'assets/images/trashify.png',
                           width: 100,
                           height: 100,
                         ),
