@@ -12,7 +12,7 @@ class ApiService {
       final response = await http.post(
         url,
         headers: {"Content-Type": "application/json"},
-        body: jsonEncode({"email": email, "password": password}),
+        body: jsonEncode({"username":username, "email": email, "password": password}),
       );
       if (response.statusCode == 201) {
         return {"success": true, "message": "Akun berhasil dibuat"};
