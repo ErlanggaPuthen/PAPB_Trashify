@@ -68,4 +68,50 @@ class ApiService {
       return {"success": false, "message": "Tidak dapat terhubung ke server"};
     }
   }
+
+  /// GET USER PROFILE UNTUK BAGIAN PROFILE
+  static Future<Map<String, dynamic>> getUserProfile(String token) async {
+    final url = Uri.parse('$baseUrl/user/profile');
+    try {
+      final response = await http.get(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      if (response.statusCode == 200) {
+        final responseBody = jsonDecode(response.body);
+        return {"success": true, "data": responseBody};
+      } else {
+        final responseBody = jsonDecode(response.body);
+        return {"success": false, "message": responseBody["message"]};
+      }
+    } catch (e) {
+      return {"success": false, "message": "Tidak dapat terhubung ke server"};
+    }
+  }
+
+  /// LOGOUT UNTUK BAGIAN PROFILE
+  static Future<Map<String, dynamic>> logout(String token) async {
+    final url = Uri.parse('$baseUrl/logout');
+    try {
+      final response = await http.post(
+        url,
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": "Bearer $token",
+        },
+      );
+      if (response.statusCode == 200) {
+        return {"success": true};
+      } else {
+        final responseBody = jsonDecode(response.body);
+        return {"success": false, "message": responseBody["message"]};
+      }
+    } catch (e) {
+      return {"success": false, "message": "Tidak dapat terhubung ke server"};
+    }
+  }
+
 }

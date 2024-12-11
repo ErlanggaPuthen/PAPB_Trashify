@@ -10,12 +10,24 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String email = "Memuat email...";
-  final String token = "your-auth-token";
+  late String token;
 
   @override
   void initState() {
     super.initState();
+    _initializeProfile();
+  }
+
+  Future<void> _initializeProfile() async {
+    // Fetch token after login (mock implementation, replace with actual token retrieval logic)
+    token = await _getTokenAfterLogin();
     _fetchUserProfile();
+  }
+
+  Future<String> _getTokenAfterLogin() async {
+    // Simulate fetching token from secure storage or similar
+    // Replace this logic with the actual implementation
+    return Future.value("your-auth-token");
   }
 
   Future<void> _fetchUserProfile() async {
