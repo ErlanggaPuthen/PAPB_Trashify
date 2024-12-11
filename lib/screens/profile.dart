@@ -10,7 +10,7 @@ class Profile extends StatefulWidget {
 
 class _ProfileState extends State<Profile> {
   String email = "Memuat email...";
-  final String token = "your-auth-token"; // Ganti dengan token aktual
+  final String token = "your-auth-token";
 
   @override
   void initState() {
@@ -39,9 +39,11 @@ class _ProfileState extends State<Profile> {
 
   Future<void> _logout() async {
     try {
-      final response = await ApiService.logout(token); // Logout API call
+      final response = await ApiService.logout(token);
       if (response['success'] == true) {
-        Navigator.pushReplacementNamed(context, '/login');
+        if (mounted) {
+          Navigator.pushReplacementNamed(context, '/login');
+        }
       } else {
         _showError(response['message'] ?? "Logout gagal");
       }

@@ -11,34 +11,36 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  File? _selectedImage; // Gambar yang dipilih
-  String? _result; // Hasil klasifikasi
-  bool _isLoading = false; // Status loading untuk proses klasifikasi
+  File? _selectedImage;
+  String? _result;
+  bool _isLoading = false;
 
-  // Fungsi untuk memilih gambar dari galeri
   Future<void> _pickImage(ImageSource source) async {
-    final ImagePicker picker = ImagePicker();
-    final pickedFile = await picker.pickImage(source: source);
-
-    if (pickedFile != null) {
-      setState(() {
-        _selectedImage = File(pickedFile.path);
-        _result = null; // Reset hasil klasifikasi saat memilih gambar baru
-      });
+    final picker = ImagePicker();
+    try {
+      final pickedFile = await picker.pickImage(source: source);
+      if (pickedFile != null) {
+        setState(() {
+          _selectedImage = File(pickedFile.path);
+          _result = null;
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text("Gagal memilih gambar: $e")),
+      );
     }
   }
 
-  // Fungsi untuk mengirim gambar ke API dan mendapatkan hasil klasifikasi
   Future<void> _classifyImage() async {
     if (_selectedImage == null) return;
 
     setState(() {
-      _isLoading = true; // Set status loading
-      _result = null; // Reset hasil klasifikasi
+      _isLoading = true;
+      _result = null;
     });
 
     try {
-      // Mengirim gambar ke API Flask
       final response = await ApiService.classifyImage(_selectedImage!);
 
       if (response["success"] == true) {
@@ -56,7 +58,7 @@ class _HomeScreenState extends State<HomeScreen> {
       });
     } finally {
       setState(() {
-        _isLoading = false; // Hentikan loading
+        _isLoading = false;
       });
     }
   }
@@ -68,7 +70,6 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Kotak yang mengelilingi gambar dan teks hasil klasifikasi
             Container(
               padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.all(20),
@@ -78,7 +79,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Column(
                 children: [
-                  // Tampilkan gambar yang dipilih atau placeholder
                   Container(
                     height: 250,
                     width: 250,
@@ -93,7 +93,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         : Image.file(_selectedImage!, fit: BoxFit.cover),
                   ),
                   const SizedBox(height: 20),
-                  // Teks hasil klasifikasi
                   if (_result != null)
                     Text(
                       _result!,
@@ -103,7 +102,6 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            // Tombol Klasifikasi Gambar
             if (_selectedImage != null)
               ElevatedButton(
                 onPressed: _isLoading ? null : _classifyImage,
@@ -121,10 +119,9 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _pickImage(ImageSource.gallery),
-        backgroundColor: Colors.green, // Pilih dari galeri saat ditekan
+        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
-      floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
     );
   }
 }

@@ -8,10 +8,6 @@ class HasilRiwayatPrediksi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Riwayat Prediksi'),
-      //   backgroundColor: Colors.green,
-      // ),
       body: riwayatPrediksi.isEmpty
           ? const Center(child: Text('Tidak ada riwayat prediksi.'))
           : ListView.builder(
@@ -24,7 +20,7 @@ class HasilRiwayatPrediksi extends StatelessWidget {
                   child: ListTile(
                     leading: Icon(
                       item['status'] == 'Sukses' ? Icons.check_circle : Icons.error,
-                      color: item['status'] == 'Sukses' ? Color(0xff098A4E) : Colors.red,
+                      color: item['status'] == 'Sukses' ? const Color(0xff098A4E) : Colors.red,
                       size: 40,
                     ),
                     title: Text(
