@@ -9,30 +9,30 @@ class SignUpPage extends StatefulWidget {
 }
 
 class _SignUpPageState extends State<SignUpPage> {
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
 
   final _formKey = GlobalKey<FormState>();
   String _errorMessage = '';
   bool _isPasswordVisible = false;
-  bool _isConfirmPasswordVisible = false;
 
   @override
   void dispose() {
+    _usernameController.dispose();
     _emailController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
     super.dispose();
   }
 
   Future<void> _signUp() async {
     if (_formKey.currentState?.validate() ?? false) {
+      String username = _usernameController.text.trim();
       String email = _emailController.text.trim();
       String password = _passwordController.text.trim();
 
       // Menggunakan ApiService untuk proses registrasi
-      final result = await ApiService.register(email, password);
+      final result = await ApiService.register(username, email, password);
 
       if (result['success']) {
         showDialog(
@@ -97,11 +97,11 @@ class _SignUpPageState extends State<SignUpPage> {
                         ),
                       ),
                       const SizedBox(height: 20.0),
+                      _buildUsernameField(),
+                      const SizedBox(height: 20.0),
                       _buildEmailField(),
                       const SizedBox(height: 20.0),
                       _buildPasswordField(),
-                      const SizedBox(height: 20.0),
-                      _buildConfirmPasswordField(),
                       const SizedBox(height: 10.0),
                       _buildErrorMessage(),
                       ElevatedButton(
@@ -161,6 +161,36 @@ class _SignUpPageState extends State<SignUpPage> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _buildUsernameField() {
+    return TextFormField(
+      controller: _usernameController,
+      decoration: InputDecoration(
+        hintText: 'Username',
+        fillColor: Colors.white,
+        filled: true,
+        border: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
+        ),
+        focusedBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
+        ),
+        enabledBorder: OutlineInputBorder(
+          borderRadius: BorderRadius.circular(8.0),
+          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
+        ),
+        prefixIcon: const Icon(Icons.person),
+      ),
+      validator: (value) {
+        if (value == null || value.isEmpty) {
+          return 'Username harus diisi';
+        }
+        return null;
+      },
     );
   }
 
@@ -229,47 +259,6 @@ class _SignUpPageState extends State<SignUpPage> {
       validator: (value) {
         if (value == null || value.isEmpty) {
           return 'Password harus diisi';
-        }
-        return null;
-      },
-    );
-  }
-
-  Widget _buildConfirmPasswordField() {
-    return TextFormField(
-      controller: _confirmPasswordController,
-      obscureText: !_isConfirmPasswordVisible,
-      decoration: InputDecoration(
-        hintText: 'Konfirmasi Password',
-        fillColor: Colors.white,
-        filled: true,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
-        ),
-        enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8.0),
-          borderSide: const BorderSide(color: Color(0xff098A4E), width: 2.0),
-        ),
-        prefixIcon: const Icon(Icons.lock),
-        suffixIcon: IconButton(
-          icon: Icon(
-            _isConfirmPasswordVisible ? Icons.visibility : Icons.visibility_off,
-          ),
-          onPressed: () {
-            setState(() {
-              _isConfirmPasswordVisible = !_isConfirmPasswordVisible;
-            });
-          },
-        ),
-      ),
-      validator: (value) {
-        if (value != _passwordController.text) {
-          return 'Password tidak sesuai';
         }
         return null;
       },

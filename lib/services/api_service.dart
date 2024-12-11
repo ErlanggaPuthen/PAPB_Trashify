@@ -3,10 +3,10 @@ import 'dart:io';
 import 'package:http/http.dart' as http;
 
 class ApiService {
-  static const String baseUrl = "http://localhost:5000";
+  static const String baseUrl = "http://192.168.235.115:5000"; ///"http://localhost:5000";
 
   /// Register user
-  static Future<Map<String, dynamic>> register(String email, String password) async {
+  static Future<Map<String, dynamic>> register(String username, String email, String password) async {
     final url = Uri.parse('$baseUrl/register');
     try {
       final response = await http.post(
