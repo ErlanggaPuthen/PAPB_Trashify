@@ -58,7 +58,7 @@ class _SignUpPageState extends State<SignUpPage> {
                       const SizedBox(height: 20.0),
                       ClipOval(
                         child: Image.asset(
-                          'assets/trashify.png',
+                          'assets/images/trashify.png',
                           width: 100,
                           height: 100,
                         ),

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
+import 'package:trashify_mobile/services/api_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -12,31 +13,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   File? _selectedImage;
   String? _result;
-
-  // Tambahkan instance TFLiteService
-  final TFLiteService _tfliteService = TFLiteService();
-
-  @override
-  void initState() {
-    super.initState();
-    _loadModel();
-  }
-
-  @override
-  void dispose() {
-    _tfliteService.closeModel(); // Gunakan instance untuk menutup model
-    super.dispose();
-  }
-
-  // Fungsi untuk memuat model TensorFlow Lite
-  Future<void> _loadModel() async {
-    try {
-      await _tfliteService.loadModel(); // Muat model menggunakan instance
-      print("Model berhasil dimuat");
-    } catch (e) {
-      print("Gagal memuat model: $e");
-    }
-  }
+  final ApiService _apiService = ApiService(baseUrl: 'http://192.168.1.32:5000');
 
   // Fungsi untuk memilih gambar dari galeri
   Future<void> _pickImage(ImageSource source) async {
@@ -51,26 +28,24 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // Fungsi untuk mengklasifikasikan gambar
+  // Fungsi untuk mengklasifikasikan gambar melalui API
   Future<void> _classifyImage() async {
     if (_selectedImage == null) return;
 
     try {
-      // Menjalankan model TensorFlow Lite pada gambar menggunakan instance
-      final result = await _tfliteService.classifyImage(_selectedImage!.path);
+      final result = await _apiService.classifyImage(_selectedImage!);
 
-      if (result != null) {
-        setState(() {
-          _result = 'Kelas: ${result['class']} | Kepercayaan: ${result['confidence']}%';
-        });
-      } else {
-        setState(() {
-          _result = "Gagal mengklasifikasikan gambar.";
-        });
-      }
+      setState(() {
+        // Interpretasikan hasil kelas
+        final int classIndex = result['class'];
+        final String confidence = result['confidence'];
+        final className = classIndex == 0 ? 'Organik' : 'Anorganik';
+
+        _result = 'Kelas: $className\nKepercayaan: $confidence';
+      });
     } catch (e) {
       setState(() {
-        _result = "Terjadi kesalahan: $e";
+        _result = 'Terjadi kesalahan: $e';
       });
     }
   }
