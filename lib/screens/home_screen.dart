@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:trashify_mobile/services/tflite.dart'; // Import service TFLite
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
