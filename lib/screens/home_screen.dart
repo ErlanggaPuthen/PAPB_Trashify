@@ -14,6 +14,9 @@ class _HomeScreenState extends State<HomeScreen> {
   File? _selectedImage;
   String? _result;
 
+  // Tambahkan instance TFLiteService
+  final TFLiteService _tfliteService = TFLiteService();
+
   @override
   void initState() {
     super.initState();
@@ -22,14 +25,14 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   void dispose() {
-    TFLiteService.closeModel(); // Menutup model saat layar dihancurkan
+    _tfliteService.closeModel(); // Gunakan instance untuk menutup model
     super.dispose();
   }
 
   // Fungsi untuk memuat model TensorFlow Lite
   Future<void> _loadModel() async {
     try {
-      await TFLiteService.loadModel(); // Muat model menggunakan TFLiteService
+      await _tfliteService.loadModel(); // Muat model menggunakan instance
       print("Model berhasil dimuat");
     } catch (e) {
       print("Gagal memuat model: $e");
@@ -54,8 +57,8 @@ class _HomeScreenState extends State<HomeScreen> {
     if (_selectedImage == null) return;
 
     try {
-      // Menjalankan model TensorFlow Lite pada gambar
-      final result = await TFLiteService.classifyImage(_selectedImage!.path);
+      // Menjalankan model TensorFlow Lite pada gambar menggunakan instance
+      final result = await _tfliteService.classifyImage(_selectedImage!.path);
 
       if (result != null) {
         setState(() {
@@ -95,11 +98,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     height: 250,
                     width: 250,
                     decoration: BoxDecoration(
-                      border: Border.all(color: Color(0xff098A4E)),
+                      border: Border.all(color: const Color(0xff098A4E)),
                       borderRadius: BorderRadius.circular(10),
                     ),
                     child: _selectedImage == null
-                        ? Center(
+                        ? const Center(
                             child: Text('Pilih gambar', style: TextStyle(color: Colors.grey)),
                           )
                         : Image.file(_selectedImage!, fit: BoxFit.cover),
@@ -119,7 +122,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (_selectedImage != null)
               ElevatedButton(
                 onPressed: _classifyImage,
-                style: ElevatedButton.styleFrom(backgroundColor: Color(0xff098A4E)),
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff098A4E)),
                 child: const Text('Klasifikasi Gambar'),
               ),
           ],
