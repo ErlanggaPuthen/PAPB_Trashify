@@ -15,11 +15,25 @@ class MainScreen extends StatefulWidget {
 class _MainScreenState extends State<MainScreen> {
   int _selectedIndex = 0;
 
-  final List<Widget> _widgetOptions = [
-    const HomeScreen(),
-    HasilRiwayatPrediksi(riwayatPrediksi: []), // Navigasi ke halaman hasil riwayat prediksi
-    const Profile(),
-  ];
+  List<Map<String, dynamic>> _riwayatPrediksi = [];
+
+  final List<Widget> _widgetOptions = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _widgetOptions.addAll([
+      HomeScreen(
+        onAddRiwayat: (riwayat) {
+          setState(() {
+            _riwayatPrediksi.add(riwayat);
+          });
+        },
+      ),
+      HasilRiwayatPrediksi(riwayatPrediksi: _riwayatPrediksi),
+      const Profile(),
+    ]);
+  }
 
   void _onItemTapped(int index) {
     setState(() {
@@ -47,12 +61,12 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Color(0xff098A4E),
-        foregroundColor: Color.fromARGB(255, 255, 255, 255),
+        backgroundColor: const Color(0xff098A4E),
+        foregroundColor: const Color.fromARGB(255, 255, 255, 255),
         title: Text(
           'Trashify',
           style: GoogleFonts.poppins(
-            fontSize: 24, 
+            fontSize: 24,
             fontWeight: FontWeight.bold,
             color: Colors.white,
           ),

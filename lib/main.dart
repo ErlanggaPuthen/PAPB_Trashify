@@ -5,7 +5,6 @@ import 'package:trashify/screens/splash_screen.dart';
 import 'auth/login.dart';
 import 'auth/register.dart';
 import 'screens/profile.dart';
-
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 

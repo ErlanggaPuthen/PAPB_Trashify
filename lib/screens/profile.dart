@@ -43,7 +43,7 @@ class Profile extends StatelessWidget {
               icon: const Icon(Icons.logout),
               label: const Text("Logout"),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
+                backgroundColor: Color(0xff098A4E),
                 foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 shape: RoundedRectangleBorder(

@@ -5,7 +5,9 @@ import 'package:intl/intl.dart';
 import 'package:trashify/services/api_service.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({super.key});
+  final Function(Map<String, dynamic>) onAddRiwayat;
+
+  const HomeScreen({super.key, required this.onAddRiwayat});
 
   @override
   _HomeScreenState createState() => _HomeScreenState();
@@ -14,10 +16,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   File? _selectedImage;
   String? _result;
-  final ApiService _apiService = ApiService(baseUrl: 'http://192.168.100.75:5000');
-  final List<Map<String, dynamic>> _riwayatPrediksi = []; // Data riwayat
+  final ApiService _apiService = ApiService(baseUrl: 'http://192.168.1.39:5000');
 
-  // Fungsi untuk memilih gambar dari galeri
   Future<void> _pickImage(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
     final pickedFile = await picker.pickImage(source: source);
@@ -30,7 +30,6 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
-  // Fungsi untuk menghapus gambar
   void _deleteImage() {
     setState(() {
       _selectedImage = null;
@@ -38,7 +37,6 @@ class _HomeScreenState extends State<HomeScreen> {
     });
   }
 
-  // Fungsi untuk mengklasifikasikan gambar melalui API
   Future<void> _classifyImage() async {
     if (_selectedImage == null) return;
 
@@ -52,23 +50,25 @@ class _HomeScreenState extends State<HomeScreen> {
 
         _result = 'Kelas: $className\nKepercayaan: $confidence';
 
-        // Tambahkan ke riwayat
-        _riwayatPrediksi.add({
+        final riwayat = {
           'judul': className,
           'tanggal': DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()),
           'status': 'Sukses',
-        });
+        };
+
+        widget.onAddRiwayat(riwayat);
       });
     } catch (e) {
       setState(() {
         _result = 'Terjadi kesalahan: $e';
 
-        // Tambahkan ke riwayat dengan status gagal
-        _riwayatPrediksi.add({
+        final riwayat = {
           'judul': 'Tidak diketahui',
           'tanggal': DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()),
           'status': 'Gagal',
-        });
+        };
+
+        widget.onAddRiwayat(riwayat);
       });
     }
   }
@@ -76,12 +76,11 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: null, // Menghilangkan appBar
+      appBar: null,
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            // Kotak yang mengelilingi gambar dan teks hasil klasifikasi
             Container(
               padding: const EdgeInsets.all(10),
               margin: const EdgeInsets.all(20),
@@ -91,7 +90,6 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
               child: Column(
                 children: [
-                  // Tampilkan gambar yang dipilih atau placeholder
                   Container(
                     height: 250,
                     width: 250,
@@ -106,7 +104,6 @@ class _HomeScreenState extends State<HomeScreen> {
                         : Image.file(_selectedImage!, fit: BoxFit.cover),
                   ),
                   const SizedBox(height: 20),
-                  // Teks hasil klasifikasi
                   if (_result != null)
                     Text(
                       _result!,
@@ -116,14 +113,12 @@ class _HomeScreenState extends State<HomeScreen> {
                 ],
               ),
             ),
-            // Tombol Klasifikasi Gambar
             if (_selectedImage != null)
               ElevatedButton(
                 onPressed: _classifyImage,
                 style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff098A4E)),
                 child: const Text('Klasifikasi Gambar'),
               ),
-            // Tombol Hapus Gambar
             if (_selectedImage != null)
               ElevatedButton(
                 onPressed: _deleteImage,
@@ -135,7 +130,7 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _pickImage(ImageSource.gallery),
-        backgroundColor: Colors.green, // Pilih dari galeri saat ditekan
+        backgroundColor: Colors.green,
         child: const Icon(Icons.add),
       ),
       floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
