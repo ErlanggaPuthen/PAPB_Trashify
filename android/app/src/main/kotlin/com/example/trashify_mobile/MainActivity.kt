@@ -1,4 +1,4 @@
-package com.example.trashify_mobile
+package com.trashify.app
 
 import io.flutter.embedding.android.FlutterActivity
 

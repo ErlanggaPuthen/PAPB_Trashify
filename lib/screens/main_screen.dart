@@ -3,7 +3,7 @@ import 'package:google_fonts/google_fonts.dart';
 import 'home_screen.dart';
 import 'hasil_riwayat_prediksi.dart';
 import 'profile.dart';
-import 'package:trashify_mobile/services/firebase_auth_services.dart';
+import 'package:trashify/services/firebase_auth_services.dart';
 
 class MainScreen extends StatefulWidget {
   const MainScreen({super.key});
@@ -17,7 +17,7 @@ class _MainScreenState extends State<MainScreen> {
 
   final List<Widget> _widgetOptions = [
     const HomeScreen(),
-    HasilRiwayatPrediksi(riwayatPrediksi: []),
+    HasilRiwayatPrediksi(riwayatPrediksi: []), // Navigasi ke halaman hasil riwayat prediksi
     const Profile(),
   ];
 
@@ -47,9 +47,15 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        backgroundColor: Color(0xff098A4E),
+        foregroundColor: Color.fromARGB(255, 255, 255, 255),
         title: Text(
           'Trashify',
-          style: GoogleFonts.poppins(fontSize: 24, fontWeight: FontWeight.bold),
+          style: GoogleFonts.poppins(
+            fontSize: 24, 
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+          ),
         ),
         actions: [
           IconButton(

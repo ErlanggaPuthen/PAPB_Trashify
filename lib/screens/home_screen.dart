@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'dart:io';
-import 'package:trashify_mobile/services/api_service.dart';
+import 'package:intl/intl.dart';
+import 'package:trashify/services/api_service.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -13,7 +14,8 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   File? _selectedImage;
   String? _result;
-  final ApiService _apiService = ApiService(baseUrl: 'http://192.168.1.32:5000');
+  final ApiService _apiService = ApiService(baseUrl: 'http://192.168.100.75:5000');
+  final List<Map<String, dynamic>> _riwayatPrediksi = []; // Data riwayat
 
   // Fungsi untuk memilih gambar dari galeri
   Future<void> _pickImage(ImageSource source) async {
@@ -28,6 +30,14 @@ class _HomeScreenState extends State<HomeScreen> {
     }
   }
 
+  // Fungsi untuk menghapus gambar
+  void _deleteImage() {
+    setState(() {
+      _selectedImage = null;
+      _result = null;
+    });
+  }
+
   // Fungsi untuk mengklasifikasikan gambar melalui API
   Future<void> _classifyImage() async {
     if (_selectedImage == null) return;
@@ -36,16 +46,29 @@ class _HomeScreenState extends State<HomeScreen> {
       final result = await _apiService.classifyImage(_selectedImage!);
 
       setState(() {
-        // Interpretasikan hasil kelas
         final int classIndex = result['class'];
         final String confidence = result['confidence'];
         final className = classIndex == 0 ? 'Organik' : 'Anorganik';
 
         _result = 'Kelas: $className\nKepercayaan: $confidence';
+
+        // Tambahkan ke riwayat
+        _riwayatPrediksi.add({
+          'judul': className,
+          'tanggal': DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()),
+          'status': 'Sukses',
+        });
       });
     } catch (e) {
       setState(() {
         _result = 'Terjadi kesalahan: $e';
+
+        // Tambahkan ke riwayat dengan status gagal
+        _riwayatPrediksi.add({
+          'judul': 'Tidak diketahui',
+          'tanggal': DateFormat('yyyy-MM-dd – kk:mm').format(DateTime.now()),
+          'status': 'Gagal',
+        });
       });
     }
   }
@@ -53,6 +76,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: null, // Menghilangkan appBar
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -98,6 +122,13 @@ class _HomeScreenState extends State<HomeScreen> {
                 onPressed: _classifyImage,
                 style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff098A4E)),
                 child: const Text('Klasifikasi Gambar'),
+              ),
+            // Tombol Hapus Gambar
+            if (_selectedImage != null)
+              ElevatedButton(
+                onPressed: _deleteImage,
+                style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
+                child: const Text('Hapus Gambar'),
               ),
           ],
         ),

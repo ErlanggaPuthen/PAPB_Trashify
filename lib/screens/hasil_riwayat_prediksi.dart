@@ -8,10 +8,7 @@ class HasilRiwayatPrediksi extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // appBar: AppBar(
-      //   title: const Text('Riwayat Prediksi'),
-      //   backgroundColor: Colors.green,
-      // ),
+      appBar: null, // Menghilangkan appBar
       body: riwayatPrediksi.isEmpty
           ? const Center(child: Text('Tidak ada riwayat prediksi.'))
           : ListView.builder(

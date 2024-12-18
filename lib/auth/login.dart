@@ -1,7 +1,7 @@
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
-import 'package:trashify_mobile/services/firebase_auth_services.dart';
+import 'package:trashify/services/firebase_auth_services.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -18,7 +18,7 @@ class _SignInPageState extends State<SignInPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
   String? _errorMessage;
-  bool _isObscured = true; // Variabel untuk kontrol visibilitas password
+  bool _isObscured = true;
 
   @override
   void dispose() {

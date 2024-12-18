@@ -10,12 +10,6 @@ class Profile extends StatelessWidget {
     final String email = user?.email ?? "Email tidak ditemukan"; // Email user
 
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Profile'),
-        backgroundColor: Colors.green,
-        centerTitle: true,
-        automaticallyImplyLeading: false, // Menghapus tombol back
-      ),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -50,6 +44,7 @@ class Profile extends StatelessWidget {
               label: const Text("Logout"),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
+                foregroundColor: Colors.white,
                 padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(10),
