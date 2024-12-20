@@ -16,7 +16,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> {
   File? _selectedImage;
   String? _result;
-  final ApiService _apiService = ApiService(baseUrl: 'http://192.168.1.39:5000');
+  final ApiService _apiService = ApiService(baseUrl: 'http://172.20.10.5:5000');
 
   Future<void> _pickImage(ImageSource source) async {
     final ImagePicker picker = ImagePicker();
@@ -116,7 +116,7 @@ class _HomeScreenState extends State<HomeScreen> {
             if (_selectedImage != null)
               ElevatedButton(
                 onPressed: _classifyImage,
-                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff098A4E)),
+                style: ElevatedButton.styleFrom(backgroundColor: const Color(0xff098A4E), textStyle: const TextStyle(color: Colors.white)),
                 child: const Text('Klasifikasi Gambar'),
               ),
             if (_selectedImage != null)

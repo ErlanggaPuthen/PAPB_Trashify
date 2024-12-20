@@ -61,6 +61,7 @@ class _MainScreenState extends State<MainScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        automaticallyImplyLeading: false,
         backgroundColor: const Color(0xff098A4E),
         foregroundColor: const Color.fromARGB(255, 255, 255, 255),
         title: Text(
